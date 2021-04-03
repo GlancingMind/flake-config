@@ -8,10 +8,14 @@ in pkgs.stdenv.mkDerivation {
   name = "system-setup-shell";
 
   buildInputs = [
-    pkgs.nixFlakes
+    pkgs.gnumake
+    pkgs.vim
+    pkgs.git # required by flake
+    (pkgs.writeScriptBin "nixFlakes" ''
+      #!/usr/bin/env bash
+      exec ${pkgs.nixFlakes}/bin/nix \
+        --experimental-features "nix-command flakes" "$@"
+    '')
+    (pkgs.nixos { nix.package = pkgs.nixFlakes; }).nixos-rebuild
   ];
-
-  shellHooks = ''
-    export NIX_CONF_DIR=$(pwd)/nix-config
-  '';
 }
