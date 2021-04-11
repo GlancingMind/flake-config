@@ -96,8 +96,9 @@ inoremap <expr> <C-L> (pumvisible() <bar><bar> &insertmode) ? '<C-L>' : '<Esc>'
 "toggle paste option on and off to prevent pasted text formating
 set         pastetoggle=<F11>
 
+"NOTE use vim-picker instead, keep this as reference
 "show list of open buffers to open them
-nnoremap    <c-p>       :ls<CR>:b<space>
+"nnoremap    <c-p>       :ls<CR>:b<space>
 
 "expand directory path of current file by hitting %%
 cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>

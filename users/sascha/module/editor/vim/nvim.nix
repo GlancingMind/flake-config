@@ -1,51 +1,56 @@
-{ config, pkgs, stdenv, ... }:
+{ config, pkgs, ... }:
 
 let
-  trackedPlugins = import ./plugins.nix {};
+  trackedPlugins = pkgs.packages;
 in
 {
-  programs.neovim = {
+  home.packages = with pkgs; [
+    fzy fd ripgrep
+  ];
+
+  programs.neovim = with pkgs; {
     enable = true;
+    viAlias = true;
+    vimAlias = true;
+    vimdiffAlias = true;
     extraConfig = builtins.readFile ./config/nvimrc;
-    plugins = with trackedPlugins; [
-      gruvbox
+    plugins = [
+      pkgs.vimPlugins.vim-surround
+      pkgs.vimPlugins.vim-fugitive
       {
-        plugin = vim-baker;
-        config = builtins.readFile ./config/baker.vim;
+        plugin = pkgs.vimPlugins.gruvbox;
+        config = builtins.readFile ./config/gruvbox.vim;
       }
-      vim-erlang-omnicomplete
-      vim-erlang-runtime
-      vim-fugitive
-      vim-surround
+      trackedPlugins."gina.vim"
+      trackedPlugins.emmet-vim
+      trackedPlugins.vim-nix
       {
-        plugin = vimwiki;
-        config = builtins.readFile ./config/vimwiki.vim;
+        plugin = trackedPlugins.vim-rescript;
+        config = builtins.readFile ./config/vim-rescript.vim;
       }
-      trackedPlugins."literate.vim"
       {
-        plugin = hardmode;
-        #config = builtins.readFile ./config/hardmode.vim
+        plugin = trackedPlugins.vim-picker;
+        config = builtins.readFile ./config/vim-picker.vim;
       }
-      vim-editorconfig
       {
-        plugin = vim-editorconfig;
+        plugin = trackedPlugins."vim-editorconfig";
         config = builtins.readFile ./config/editorconfig.vim;
       }
-      emmet-vim
-      Ada-Bundle
-      vim-nix
-      psc-ide-vim
-      purescript-vim
-      vim-reason-plus
-
       {
-        plugin = vim-lsp;
-        config = builtins.readFile ./config/lsp.vim;
+        plugin = trackedPlugins.vim-baker;
+        config = builtins.readFile ./config/baker.vim;
       }
-      # required by vim-lsp
-      trackedPlugins."asyncomplete.vim"
-      # required by vim-lsp
-      trackedPlugins."asyncomplete-lsp.vim"
+      {
+        plugin = pkgs.vimPlugins.vimwiki;
+        config = builtins.readFile ./config/vimwiki.vim;
+      }
+      #pkgs.unstable.vimPlugins.telescope-nvim
+      #pkgs.unstable.vimPlugins.telescope-fzy-native-nvim
+      #{
+      #  plugin = hardmode;
+      #  #config = builtins.readFile ./config/hardmode.vim
+      #}
+      #trackedPlugins.Ada-Bundle
     ];
   };
 }

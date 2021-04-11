@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -9,7 +9,7 @@
     #./module/mail.nix
     #./module/surfraw.nix
     ./module/obs.nix
-    ./module/editor/vim/setup.nix
+    #./module/editor/vim/vim.nix
     ./module/editor/vim/nvim.nix
     ./module/shell/zsh/zsh.nix
     ./module/terminal/alacritty/settings.nix

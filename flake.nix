@@ -8,9 +8,17 @@
       url = github:nix-community/home-manager/release-20.09;
       inputs.nixpkgs.follows = "stable";
     };
+    customPkgs = {
+      url = path:./packages/plugins/vim;
+      inputs.nixpkgs.follows = "stable";
+    };
   };
 
-  outputs = { self, home-manager, stable, unstable }: {
+  outputs = { self, customPkgs, home-manager, stable, unstable }: {
+    overlays = {
+      packages = final: prev: customPkgs.packages."x86_64-linux";
+    };
+
     nixosConfigurations = let
       specialArgs = {
         hardware = import ./hardware;
@@ -23,12 +31,32 @@
         modules = [
           ./systems/laptop
           ./users/sascha
-          ./users/test
+          {
+            nixpkgs.overlays = [
+              (final: prev: {
+                packages = self.overlays.packages final prev;
+                unstable = import unstable { system = "x86_64-linux"; };
+              })
+            ];
+          }
           home-manager.nixosModules.home-manager
         ];
       };
     };
 
     laptop = self.nixosConfigurations.laptop.config.system.build.toplevel;
+
+    apps."x86_64-linux".repl = let
+      pkgs = import stable { system = "x86_64-linux"; };
+      repl = pkgs.writeShellScriptBin "repl" ''
+        confnix=$(mktemp)
+        echo "builtins.getFlake (toString $(git rev-parse --show-toplevel))" >$confnix
+        trap "rm $confnix" EXIT
+        nix repl $confnix
+      '';
+    in {
+      type = "app";
+      program = "${toString repl}/bin/repl";
+    };
   };
 }
