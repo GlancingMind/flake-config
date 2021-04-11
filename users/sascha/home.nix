@@ -3,14 +3,14 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-
   imports = [
     ./role/wayland/sway.nix
     #./role/x11/i3.nix
     #./module/mail.nix
     #./module/surfraw.nix
-    #./module/obs.nix
+    ./module/obs.nix
     ./module/editor/vim/setup.nix
+    ./module/editor/vim/nvim.nix
     ./module/shell/zsh/zsh.nix
     ./module/terminal/alacritty/settings.nix
     ./module/password-manager/pass/password-store.nix
