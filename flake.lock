@@ -76,8 +76,8 @@
       },
       "locked": {
         "dir": "packages/plugins/vim",
-        "lastModified": 1618570960,
-        "narHash": "sha256-TiFgcB7I9mFt4vvOSyGFEmyJlsCVX9kDtHZq/MQwycs=",
+        "lastModified": 1618689459,
+        "narHash": "sha256-WyzT2k3dXvevO4Wg0JkYTrPJZm/Lzorpgu/ar7CPveo=",
         "type": "git",
         "url": "file:///home/sascha/flake-config?dir=packages%2fplugins%2fvim"
       },
@@ -197,11 +197,11 @@
     },
     "stable": {
       "locked": {
-        "lastModified": 1618561877,
-        "narHash": "sha256-dojeWcMeJmBlpwMgC88crSPdy0a75mid2HVRi9S7FsA=",
+        "lastModified": 1618701311,
+        "narHash": "sha256-v7kZlw/QwHz7oeJUTlX46mdxNxvOWtkAPwzAGjFdw4Q=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "c7e905b6a971dad2c26a31960053176c770a812a",
+        "rev": "db4dda79f8f02197d9599030faf7aae8183e455a",
         "type": "github"
       },
       "original": {
@@ -358,11 +358,11 @@
     "vim-picker": {
       "flake": false,
       "locked": {
-        "lastModified": 1615319739,
-        "narHash": "sha256-WOX/S+XoCM8QJjXXIXVuPgmLlIFDfRqOwYpgog2uCFs=",
+        "lastModified": 1618747202,
+        "narHash": "sha256-Ftc3V298rHffo1K+SJrrFCHDLCDpbw9Ku8wZYzKJIRU=",
         "owner": "srstevenson",
         "repo": "vim-picker",
-        "rev": "06c8ee4db33a6290ab004252f62e42df60e2c953",
+        "rev": "9ed4caffcd36a902501f7f0b96e50c326eb9a602",
         "type": "github"
       },
       "original": {

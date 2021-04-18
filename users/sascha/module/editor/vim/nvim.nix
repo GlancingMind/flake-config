@@ -8,15 +8,21 @@ in
     fzy fd ripgrep
   ];
 
-  programs.neovim = with pkgs; {
+  programs.neovim = {
     enable = true;
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
     extraConfig = builtins.readFile ./config/nvimrc;
+    extraPackages = [
+      # Required for vim-go plugin
+      pkgs.go
+      pkgs.gopls
+    ];
     plugins = [
       pkgs.vimPlugins.vim-surround
       pkgs.vimPlugins.vim-fugitive
+      pkgs.vimPlugins.vim-go
       {
         plugin = pkgs.vimPlugins.gruvbox;
         config = builtins.readFile ./config/gruvbox.vim;
