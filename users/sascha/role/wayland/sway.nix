@@ -9,6 +9,8 @@ in
   #nixpkgs.config.allowUnfree = true;
 
   home.packages = with pkgs; [
+    grim
+    #swappy
     qt5.qtwayland
     source-code-pro
   ];

@@ -42,7 +42,8 @@
     jmtpfs
     android-file-transfer
     gitAndTools.git-bug
-    gitAndTools.git-annex
+    gitAndTools.git-annex lsof #lsof is required for git-annex webapp
+    hledger hledger-ui
     w3m foot
     libvirt vagrant docker-compose
     #vis dvtm abduco #as Vim and Tmux alternative
