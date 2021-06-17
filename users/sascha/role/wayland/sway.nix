@@ -18,7 +18,10 @@ in
   fonts.fontconfig.enable = true;
 
   programs.firefox = lib.attrsets.recursiveUpdate (import ../../program/browser/web/firefox/firefox.nix) {
-    package = pkgs.firefox-wayland;
+    #NOTE disable firefox-wayland, as building the drv will result in a
+    #permission denied access error. Will use the normal firefox package for
+    #now.
+    #package = pkgs.firefox-wayland;
   };
 
   xdg.configFile."i3status".source = ../../program/status/i3status;
@@ -77,7 +80,10 @@ in
         {
           position = "top";
           statusCommand = "${pkgs.i3status}/bin/i3status";
-          fonts = [ "Monospace 9" "SourceCodePro 9" ];
+          fonts = {
+            names = [ "Monospace" "SourceCodePro" ];
+            size = 9.0;
+          };
         }
       ];
     };
