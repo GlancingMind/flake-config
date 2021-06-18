@@ -15,6 +15,8 @@
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
+    # Hardlink identical files together
+    autoOptimiseStore = true;
   };
 
   # NOTE installs nix with flake support as separate command
@@ -24,6 +26,16 @@
       exec ${pkgs.nixFlakes}/bin/nix --experimental-features "nix-command flakes" "$@"
     '')
   ];
+
+  # Clean /tmp directory on boot
+  boot.cleanTmpDir = true;
+
+  # Limit the systemd journal to 100 MB of disk or the last 7 days of logs,
+  # whichever happens first.
+  services.journald.extraConfig = ''
+    SystemMaxUse=100M
+    MaxFileSec=7day
+  '';
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database

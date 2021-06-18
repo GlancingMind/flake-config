@@ -82,7 +82,7 @@ in
           statusCommand = "${pkgs.i3status}/bin/i3status";
           fonts = {
             names = [ "Monospace" "SourceCodePro" ];
-            size = 9.0;
+            size = 8.0;
           };
         }
       ];
