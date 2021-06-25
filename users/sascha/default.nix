@@ -29,7 +29,7 @@ in {
     (services.networking)
     (services.development)
     (services.localisation)
-    (services.mounting)
+    (services.mounting { inherit username pkgs; })
     (services.printing)
     (services.streaming)
     (services.ssh)
