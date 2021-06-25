@@ -30,6 +30,8 @@
   # Clean /tmp directory on boot
   boot.cleanTmpDir = true;
 
+  powerManagement.cpuFreqGovernor = "ondemand";
+
   # Limit the systemd journal to 100 MB of disk or the last 7 days of logs,
   # whichever happens first.
   services.journald.extraConfig = ''
