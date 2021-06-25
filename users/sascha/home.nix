@@ -12,6 +12,7 @@
     #./module/editor/vim/vim.nix
     ./module/editor/vim/nvim.nix
     ./module/shell/zsh/zsh.nix
+    ./module/terminal/foot.nix
     ./module/terminal/alacritty/settings.nix
     ./module/password-manager/pass/password-store.nix
     #./module/irssi.nix
@@ -44,7 +45,7 @@
     gitAndTools.git-bug
     gitAndTools.git-annex lsof #lsof is required for git-annex webapp
     hledger hledger-ui
-    w3m foot
+    w3m
     libvirt vagrant docker-compose
     #vis dvtm abduco #as Vim and Tmux alternative
     zathura
