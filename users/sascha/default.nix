@@ -1,4 +1,4 @@
-{ pkgs, services, ... }:
+{ pkgs, lib, services, ... }:
 let
   username = "sascha";
 in {
@@ -22,6 +22,10 @@ in {
     useUserPackages = true;
     users."${username}" = import ./home.nix;
   };
+
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+    "goland"
+  ];
 
   imports = [
     (services.virtualisation { inherit username; })

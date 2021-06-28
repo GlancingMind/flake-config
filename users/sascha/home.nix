@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -51,6 +51,7 @@
     zathura
     chromium
     vscodium
+    jetbrains.goland
   ];
 
   programs.git = {
