@@ -71,13 +71,14 @@
       # Signing key for my public commits and repos.
       key = "0x6958F57B10911518";
     };
-    #delta.enable = true;
+    delta = {
+      enable = true;
+      options = {
+        syntax-theme="gruvbox-light";
+      };
+    };
     extraConfig = {
       pull.ff = "only";
-      core = {
-      #  pager =  "tr -d '\\r' | less -REX";
-      autocrlf = true;
-      };
     };
   };
 
