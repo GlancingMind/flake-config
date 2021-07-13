@@ -6,6 +6,8 @@ in
 {
   home.packages = with pkgs; [
     fzy fd ripgrep
+    # Add support for --remote and --servername cli-flags
+    neovim-remote
   ];
 
   programs.neovim = {
