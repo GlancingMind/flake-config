@@ -11,6 +11,7 @@
     ./module/obs.nix
     #./module/editor/vim/vim.nix
     ./module/editor/vim/nvim.nix
+    ./module/tmux.nix
     ./module/shell/zsh/zsh.nix
     ./module/terminal/foot.nix
     ./module/terminal/alacritty/settings.nix
@@ -47,12 +48,21 @@
     hledger hledger-ui
     w3m
     libvirt vagrant docker-compose
-    #vis dvtm abduco #as Vim and Tmux alternative
+    vis dvtm abduco #as Vim and Tmux alternative
     zathura
     chromium
     vscodium
+    fselect pistol
+    vgrep delta amber fastmod # sd sad
     jetbrains.goland
   ];
+
+  programs.bat = {
+    enable = true;
+    config = {
+      theme = "gruvbox-light";
+    };
+  };
 
   programs.git = {
     enable = true;
@@ -61,8 +71,13 @@
       # Signing key for my public commits and repos.
       key = "0x6958F57B10911518";
     };
+    #delta.enable = true;
     extraConfig = {
       pull.ff = "only";
+      core = {
+      #  pager =  "tr -d '\\r' | less -REX";
+      autocrlf = true;
+      };
     };
   };
 
@@ -75,8 +90,8 @@
     SHELL = "zsh";
     VISUAL = "vim";
     EDITOR = VISUAL;
-      # use NIX recursive set as $VISUAL will be empty
-      # because home-manager sorts variables and EDITOR
-      # will be set before VISUAL is known.
-    };
-  }
+    # use NIX recursive set as $VISUAL will be empty
+    # because home-manager sorts variables and EDITOR
+    # will be set before VISUAL is known.
+  };
+}
