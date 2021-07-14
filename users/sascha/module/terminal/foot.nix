@@ -7,6 +7,7 @@
       # And: https://codeberg.org/dnkl/foot/src/branch/master/foot.ini
       # for configuration.
       main = {
+        #shell = "${pkgs.tmux}/bin/tmux";
         term = "xterm-256color";
         font = "monospace:size=11";
         dpi-aware = "no";

@@ -6,6 +6,9 @@
       env = {
         TERM = "xterm-256color";
       };
+      shell = {
+        program = "${pkgs.tmux}/bin/tmux";
+      };
       font = {
         size = 11;
       };
