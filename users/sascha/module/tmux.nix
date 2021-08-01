@@ -14,11 +14,6 @@
       # Tell tmux, that the terminal emulator supports true color (24bit)
       set-option -ga terminal-overrides ",xterm-256color*:Tc"
 
-      # bind ^ as another prefix key:
-      unbind ^
-      set -g prefix2 ^
-      bind ^ send-prefix
-
       unbind space # Disable layout switching
       set -g mouse off # Disable mouse
 
