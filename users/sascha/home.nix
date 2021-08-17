@@ -11,6 +11,7 @@
     ./module/obs.nix
     #./module/editor/vim/vim.nix
     ./module/editor/vim/nvim.nix
+    ./module/emacs
     ./module/tmux.nix
     ./module/shell/zsh/zsh.nix
     ./module/terminal/foot.nix

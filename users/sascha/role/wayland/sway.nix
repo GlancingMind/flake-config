@@ -52,6 +52,7 @@ in
           xkb_layout = "de";
           xkb_model = "pc105";
           xkb_variant = "nodeadkeys";
+          xkb_options = "caps:ctrl_modifier";
         };
       };
       keybindings = lib.mkOptionDefault {
