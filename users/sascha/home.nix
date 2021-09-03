@@ -51,11 +51,13 @@
     libvirt vagrant docker-compose
     vis dvtm abduco #as Vim and Tmux alternative
     zathura
-    chromium
-    vscodium
-    fselect pistol
+    #chromium
+    #vscodium
+    fselect
     vgrep delta amber fastmod # sd sad
-    jetbrains.goland
+    #pistol
+    #jetbrains.goland
+    youtube-dl
   ];
 
   programs.direnv = {
@@ -66,8 +68,6 @@
       enableFlakes = true;
     };
   };
-
-  services.lorri.enable = true;
 
   programs.bat = {
     enable = true;
