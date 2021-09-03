@@ -13,5 +13,5 @@ in
   ];
 
   xdg.configFile."emacs/init.el".source =
-    lib.mkIf (config.programs.emacs.enable) ./init.el;
+    lib.mkIf (config.programs.emacs.enable) ./tangeled/init.el;
 }
