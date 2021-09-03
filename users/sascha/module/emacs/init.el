@@ -198,7 +198,7 @@
   (org-structure-template-alist
     '(; custom
        ("sh" . "src shell")
-       ("el" . "src emacs-list")
+       ("el" . "src emacs-lisp")
        ; default
        ("a" . "export ascii")
        ("c" . "center")
