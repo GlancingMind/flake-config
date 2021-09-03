@@ -84,7 +84,7 @@
     "sl" '(avy-goto-line :which-key "line")
     "sw" '(avy-goto-word-0 :which-key "word")
     "sb" '(consult-buffer :which-key "buffer")
-    ; TODO switch to package.el on emacs 28. See following link fot reference:
+    ; TODO switch to package.el on emacs 28. See following link for reference:
     ; https://protesilaos.com/dotemacs/#h:7862f39e-aed0-4d02-9f1e-60c4601a9734
     "sp" '(projectile-switch-project :which-key "project")
     ; TODO open file vertically or horicontally
@@ -174,25 +174,56 @@
   :ensure t
   :init (corfu-global-mode)
   :custom
-  (corfu-cycle t)
-  :bind (:map corfu-map
-    ("C-n" . corfu-next)
-    ("C-p" . corfu-previous)))
-; TODO invoke corfu on evil-complete-next  (C-n/C-p) or bind in inset mode
+  (corfu-cycle t))
 
 (use-package avy
   :ensure t
-  :commands (avy-goto-char avy-goto-word-0 avy-goto-line)
-  :general
-  (general-nmap
-    "üc" 'avy-goto-char
-    "üw" 'avy-goto-word-0
-    "ül" 'avy-goto-line))
+  :commands (avy-goto-char avy-goto-word-0 avy-goto-line))
 
-; bind projectile command map to leader/p
+(use-package wgrep
+  :defer 2
+  :ensure t)
+
+(use-package magit
+  :defer 2
+  :ensure t)
+
+(use-package org
+  :ensure t
+  :custom
+  (org-ellipsis " ▼")
+  (org-log-done 'time)
+  (org-log-into-drawer t)
+  (org-confirm-babel-evaluate nil)
+  (org-structure-template-alist
+    '(; custom
+       ("sh" . "src shell")
+       ("el" . "src emacs-list")
+       ; default
+       ("a" . "export ascii")
+       ("c" . "center")
+       ("C" . "comment")
+       ("e" . "example")
+       ("E" . "export")
+       ("h" . "export html")
+       ("l" . "export latex")
+       ("q" . "quote")
+       ("s" . "src")
+       ("v" . "verse")))
+  :gfhook
+  #'visual-line-mode
+  :config
+  (org-babel-do-load-languages
+    'org-babel-load-languages
+    '((emacs-lisp . t)
+       (shell . t))))
+
+(require 'org-tempo)
+
+
+; (use-package password-store) ; auth-source-pass
 ; (use-package embark)
 ; (use-package embark-consult)
-; (use-package wgrep)
 ; (use-package hercules)
 ; (use-package direnv) ; also enable lorri service via home-manager
 ; (use-package evil-snipe)
@@ -228,9 +259,15 @@
 
 ;; Display the cursor column in modeline
 (column-number-mode t)
+
 ;; Display a ruler in programming modes at the given column
-(setq fill-column 78)
-(add-hook 'prog-mode-hook 'display-fill-column-indicator-mode)
+(dolist (mode '(prog-mode-hook
+                 text-mode-hook))
+  (add-hook mode '(lambda()
+                    (set-fill-column 78)
+                    (auto-fill-mode)
+                    (display-fill-column-indicator-mode))))
+
 ;; Enable line numbers
 (global-display-line-numbers-mode t)
 ;; Disable line numbers for some modes
