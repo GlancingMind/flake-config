@@ -3,27 +3,95 @@
 
 * Settings
 
-  #+begin_src emacs-lisp
-    (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+** Setup use-package
 
-                                            ; Initialize package sources
-    (require 'package)
+   #+begin_src emacs-lisp
+     (require 'package)
+     (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                              ("org" . "https://orgmode.org/elpa/")
+                              ("elpa" . "https://elpa.gnu.org/packages/")))
+     (package-initialize)
+     (unless package-archive-contents
+       (package-refresh-contents))
 
-    (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                             ("org" . "https://orgmode.org/elpa/")
-                             ("elpa" . "https://elpa.gnu.org/packages/")))
+     ;; Initialize use-package on non-Linux platforms
+     (unless (package-installed-p 'use-package)
+       (package-install 'use-package))
 
-    (package-initialize)
-    (unless package-archive-contents
-      (package-refresh-contents))
+     (require 'use-package)
+     (setq use-package-always-ensure t)
+   #+end_src
 
-                                            ; Initialize use-package on non-Linux platforms
-    (unless (package-installed-p 'use-package)
-      (package-install 'use-package))
+** Completion System
 
-    (require 'use-package)
-    (setq use-package-always-ensure t)
-  #+end_src
+*** Vertico
+
+    Provides a vertical completion UI where every entry is displayed in a
+    separate row. This is more pleasent then the default emacs completion UI
+    which displays all entries in one row.
+
+    #+begin_src emacs-lisp
+      (use-package vertico
+        :ensure t
+        :init
+        (vertico-mode)
+        (setq vertico-cycle t))
+    #+end_src
+
+*** Orderless
+
+    Provides diffrent filter styles to filter completion entries via a given
+    string.
+
+    #+begin_src emacs-lisp
+      (use-package orderless
+        :ensure t
+        :config
+        (setq completion-styles '(orderless)))
+    #+end_src
+
+*** Marginalia
+
+    Displays some known metadata about the particular completion entry within
+    the completion menu.
+
+    #+begin_src emacs-lisp
+      (use-package marginalia
+        :ensure t
+        :init (marginalia-mode))
+    #+end_src
+
+*** Consult
+
+    Provides
+
+    - completion for some emacs,
+    - new commands to use diffrent grep programs asynchronously,
+    - live preview for e.g. load-theme.
+
+    #+begin_src emacs-lisp
+      (use-package consult
+        :ensure t)
+    #+end_src
+
+*** Corfu
+
+    Provides an in Buffer popup completion menu.
+
+    #+begin_src emacs-lisp
+      (use-package corfu
+        :ensure t
+        :init (corfu-global-mode)
+        :custom
+        (corfu-cycle t))
+    #+end_src
+
+*** TODO Actions for completion items
+
+    #+begin_src emacs-lisp
+      ;; (use-package embark)
+      ;; (use-package embark-consult)
+    #+end_src
 
 * Keybindings
 
@@ -57,6 +125,8 @@
         :keymaps '(normal insert visual emacs)
         :prefix "SPC"
         :global-prefix "C-SPC")
+      ;;(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+      (general-def "<escape>" 'keyboard-escape-quit)
       (general-def 'normal
         ":" 'evil-repeat
         "." 'evil-ex
@@ -74,64 +144,23 @@
         "wr" '(split-window-right :which-key "new window to the right")
         "wo" '(ace-delete-other-windows :which-key "close all except")
 
-                                            ; This are keys to find something (with an UNKOWN location)
+        ;; This are keys to find something (with an UNKOWN location)
         "f" '(:ignore s :which-key "find")
         "fl" '(consult-line :which-key "line")
         "ff" '(project-find-file :which-key "file")
 
-                                            ; This are keys to jump fast to some KNOWN location
-                                            ; NOTE could also rename to "go to"
+        ;; This are keys to jump fast to some KNOWN location
+        ;; NOTE could also rename to "go to"
         "s" '(:ignore s :which-key "switch to")
         "sc" '(avy-goto-char :which-key "character")
         "sl" '(avy-goto-line :which-key "line")
         "sw" '(avy-goto-word-0 :which-key "word")
         "sb" '(consult-buffer :which-key "buffer")
-                                            ; TODO switch to package.el on emacs 28. See following link for reference:
-                                            ; https://protesilaos.com/dotemacs/#h:7862f39e-aed0-4d02-9f1e-60c4601a9734
+        ;; TODO switch to package.el on emacs 28. See following link for reference:
+        ;; https://protesilaos.com/dotemacs/#h:7862f39e-aed0-4d02-9f1e-60c4601a9734
         "sp" '(projectile-switch-project :which-key "project")
-                                            ; TODO open file vertically or horicontally
-        "sf" '(project-find-file :which-key "file")
-        ))
-
-    (use-package hydra :ensure t)
-    (defhydra hydra-insert-cmds ()
-      "Commands"
-      ("ö" (insert "ö") "insert (leader) ö" :exit t)
-      ("e" execute-extended-command "execute" :exit t)
-      ("." evil-ex "evil ex" :exit t)
-      ("C-d" evil-window-delete "close window" :exit t)
-      ("wc" evil-window-delete "close window" :exit t)
-      ("o" evil-window-next "next window")
-      ("j" hydra-jump/body "Jump" :exit t)
-      ("f" nil "finished" :exit t))
-    (defhydra hydra-jump ()
-      "jump"
-      ("c" avy-goto-char "to character" :exit t)
-      ("w" avy-goto-word-0 "to word" :exit t)
-      ("l" avy-goto-line :which-key "to line" :exit t)
-      ("f" nil "finished" :exit t))
-
-    (use-package ace-window
-      :ensure t
-      :custom
-      (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-      (aw-scope 'frame)
-      (aw-minibuffer-flag t)
-      (aw-dispatch-always t)
-      (aw-dispatch-alist
-       '(
-         (?x aw-delete-window "delete")
-         (?m aw-swap-window "swap")
-         (?M aw-move-window "move")
-         (?n aw-flip-window "aw-flip-window")
-         (?u aw-switch-buffer-other-window "switch buffer other window")
-         (?f aw-split-window-fair "split fair")
-         (?v aw-split-window-vert "split vertical")
-         (?r aw-split-window-horz "split horizontal (to the _r_ight)")
-         (?o aw-delete-other-windows "delete other windows")
-         (?? aw-show-dispatch-help "help"))
-       "List of actions for `aw-dispatch-default`.")
-      :bind ("M-o" . ace-window))
+        ;; TODO open file vertically or horicontally
+        "sf" '(project-find-file :which-key "file")))
 
     (use-package which-key
       :ensure t
@@ -139,57 +168,111 @@
       :diminish which-key-mode
       :custom
       (which-key-idle-delay 0.1))
+  #+end_src
 
+** Within Buffers
+
+   #+begin_src emacs-lisp
+     (use-package avy
+       :ensure t
+       :commands (avy-goto-char avy-goto-word-0 avy-goto-line))
+   #+end_src
+
+** Between windows
+
+   #+begin_src emacs-lisp
+     (use-package ace-window
+       :ensure t
+       :custom
+       (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+       (aw-scope 'frame)
+       (aw-minibuffer-flag t)
+       (aw-dispatch-always t)
+       (aw-dispatch-alist
+        '(
+          (?x aw-delete-window "delete")
+          (?m aw-swap-window "swap")
+          (?M aw-move-window "move")
+          (?n aw-flip-window "aw-flip-window")
+          (?u aw-switch-buffer-other-window "switch buffer other window")
+          (?f aw-split-window-fair "split fair")
+          (?v aw-split-window-vert "split vertical")
+          (?r aw-split-window-horz "split horizontal (to the _r_ight)")
+          (?o aw-delete-other-windows "delete other windows")
+          (?? aw-show-dispatch-help "help"))
+        "List of actions for `aw-dispatch-default`.")
+       :bind ("M-o" . ace-window))
+   #+end_src
+
+** Hydras
+
+   #+begin_src emacs-lisp
+     (use-package hydra :ensure t)
+
+     (defhydra hydra-insert-cmds ()
+       "Commands"
+       ("ö" (insert "ö") "insert (leader) ö" :exit t)
+       ("e" execute-extended-command "execute" :exit t)
+       ("." evil-ex "evil ex" :exit t)
+       ("C-d" evil-window-delete "close window" :exit t)
+       ("wc" evil-window-delete "close window" :exit t)
+       ("o" evil-window-next "next window")
+       ("j" hydra-jump/body "Jump" :exit t)
+       ("f" nil "finished" :exit t))
+     (defhydra hydra-jump ()
+       "jump"
+       ("c" avy-goto-char "to character" :exit t)
+       ("w" avy-goto-word-0 "to word" :exit t)
+       ("l" avy-goto-line :which-key "to line" :exit t)
+       ("f" nil "finished" :exit t))
+   #+end_src
+
+* Development
+
+** Editorconfig
+
+   Respect project settings defined within a .editorconfig-file.
+
+  #+begin_src emacs-lisp
     (use-package editorconfig
       :ensure t
       :config
       (editorconfig-mode 1))
+  #+end_src
 
+** Projectile
+
+   Used to switch between projects.
+
+  #+begin_src emacs-lisp
     (use-package projectile
       :ensure t
       :diminish projectile-mode
       :config (projectile-mode)
-      :init
-      (when (file-directory-p "~/workspace/personal")
-        (setq projectile-project-search-path '("~/workspace/personal")))
-      (setq projectile-switch-project-action #'projectile-dired))
-
-    (use-package vertico
-      :ensure t
-      :init
-      (vertico-mode)
-      (setq vertico-cycle t))
-
-    (use-package orderless
-      :ensure t
-      :config
-      (setq completion-styles '(orderless)))
-
-    (use-package marginalia
-      :ensure t
-      :init (marginalia-mode))
-
-    (use-package consult
-      :ensure t)
-
-    (use-package corfu
-      :ensure t
-      :init (corfu-global-mode)
       :custom
-      (corfu-cycle t))
+      (projectile-project-search-path '("~/workspace/personal")))
+      ; (setq projectile-switch-project-action #'projectile-dired))
+  #+end_src
 
-    (use-package avy
-      :ensure t
-      :commands (avy-goto-char avy-goto-word-0 avy-goto-line))
+** Refactoring
 
-    (use-package wgrep
-      :defer 2
-      :ensure t)
+   #+begin_src emacs-lisp
+     (use-package wgrep
+       :defer 2
+       :ensure t)
+   #+end_src
 
-    (use-package magit
-      :defer 2
-      :ensure t)
+** Version Control
 
+   #+begin_src emacs-lisp
+     (use-package magit
+       :defer 2
+       :ensure t)
+   #+end_src
+
+* Org-Mode
+
+  #+begin_src emacs-lisp
     (use-package org
       :ensure t
       :custom
@@ -198,10 +281,11 @@
       (org-log-into-drawer t)
       (org-confirm-babel-evaluate nil)
       (org-structure-template-alist
-       '(; custom
+       '(
+         ;; custom
          ("sh" . "src shell")
          ("el" . "src emacs-lisp")
-                                            ; default
+         ;; default
          ("a" . "export ascii")
          ("c" . "center")
          ("C" . "comment")
@@ -225,64 +309,89 @@
 
 * Appearance
 
+** Reduced clutter and distraction
+
+   #+begin_src emacs-lisp
+     (setq ring-bell-function 'ignore)   ; Disable alarm bell
+     (setq inhibit-startup-message t)    ; Remove startup message
+     (setq initial-scratch-message "Ready for work? Use C-h for help.")
+     (setq cursor-type 'hbar)
+
+     (menu-bar-mode -1)      ; Disable the menu bar
+     (tool-bar-mode -1)      ; Disable the toolbar
+     (scroll-bar-mode -1)    ; Disable visible scrollbar
+     (tooltip-mode -1)       ; Disable tooltips
+     (set-fringe-mode 10)    ; Give some breathing room
+   #+end_src
+
+** Theme
+
+   #+begin_src emacs-lisp
+     (use-package all-the-icons)
+
+     (use-package doom-themes
+       :ensure t
+       :custom
+       (doom-themes-enable-bold t)
+       (doom-themes-enable-italic t)
+       :config
+       (load-theme 'doom-gruvbox t))
+   #+end_src
+
+** Modeline
+
+   #+begin_src emacs-lisp
+     (use-package doom-modeline
+       :ensure t
+       :init (doom-modeline-mode t))
+
+     ;; Display the cursor column in modeline
+     (column-number-mode t)
+   #+end_src
+
+** Ruler
+
+   Display a ruler in programming modes at the given column.
+
+   #+begin_src emacs-lisp
+     (dolist (mode '(prog-mode-hook
+                     text-mode-hook))
+       (add-hook mode '(lambda()
+                         (set-fill-column 78)
+                         (auto-fill-mode)
+                         (display-fill-column-indicator-mode))))
+   #+end_src
+
+** Linenumbers
+
+   #+begin_src emacs-lisp
+     ;; Enable line numbers
+     (global-display-line-numbers-mode t)
+     ;; Disable line numbers for some modes
+     (dolist (mode '(term-mode-hook
+                     shell-mode-hook
+                     eshell-mode-hook))
+       (add-hook mode (lambda () (display-line-numbers-mode 0))))
+   #+end_src
+
+** Colorful parenthesis
+
+   #+begin_src emacs-lisp
+     (use-package rainbow-delimiters
+       :ensure t
+       :ghook 'prog-mode-hook)
+   #+end_src
+
+* TODO Credential Managment
+
   #+begin_src emacs-lisp
-    (setq ring-bell-function 'ignore)   ; Disable alarm bell
-    (setq inhibit-startup-message t)    ; Remove startup message
-    (setq initial-scratch-message "Ready for work? Use C-h for help.")
-    (setq cursor-type 'hbar)
-
-    (menu-bar-mode -1)      ; Disable the menu bar
-    (tool-bar-mode -1)      ; Disable the toolbar
-    (scroll-bar-mode -1)    ; Disable visible scrollbar
-    (tooltip-mode -1)       ; Disable tooltips
-    (set-fringe-mode 10)    ; Give some breathing room
-
-    (use-package all-the-icons)
-
-    (use-package doom-themes
-      :ensure t
-      :custom
-      (doom-themes-enable-bold t)
-      (doom-themes-enable-italic t)
-      :config
-      (load-theme 'doom-gruvbox t))
-
-    (use-package doom-modeline
-      :ensure t
-      :init (doom-modeline-mode t))
-
-    ;; Display the cursor column in modeline
-    (column-number-mode t)
-
-    ;; Display a ruler in programming modes at the given column
-    (dolist (mode '(prog-mode-hook
-                    text-mode-hook))
-      (add-hook mode '(lambda()
-                        (set-fill-column 78)
-                        (auto-fill-mode)
-                        (display-fill-column-indicator-mode))))
-
-    ;; Enable line numbers
-    (global-display-line-numbers-mode t)
-    ;; Disable line numbers for some modes
-    (dolist (mode '(org-mode-hook
-                    term-mode-hook
-                    shell-mode-hook
-                    eshell-mode-hook))
-      (add-hook mode (lambda () (display-line-numbers-mode 0))))
-
-    (use-package rainbow-delimiters
-      :ensure t
-      :ghook 'prog-mode-hook)
+    ;; (use-package password-store) ; auth-source-pass
   #+end_src
 
-* TODOs
+* TODO Other packages
 
-  #+begin_src emacs-list
-; (use-package password-store) ; auth-source-pass
-; (use-package embark)
-; (use-package embark-consult)
-; (use-package hercules)
-; (use-package direnv) ; also enable lorri service via home-manager
-; (use-package evil-snipe)
+  #+begin_src emacs-lisp
+    ;; (use-package hercules)
+    ;; (use-package direnv) ; also enable lorri service via home-manager
+    ;; (use-package evil-snipe)
   #+end_src

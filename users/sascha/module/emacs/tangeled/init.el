@@ -1,22 +1,44 @@
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-
-                                        ; Initialize package sources
 (require 'package)
-
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")
                          ("elpa" . "https://elpa.gnu.org/packages/")))
-
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
 
-                                        ; Initialize use-package on non-Linux platforms
+;; Initialize use-package on non-Linux platforms
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 
 (require 'use-package)
 (setq use-package-always-ensure t)
+
+(use-package vertico
+  :ensure t
+  :init
+  (vertico-mode)
+  (setq vertico-cycle t))
+
+(use-package orderless
+  :ensure t
+  :config
+  (setq completion-styles '(orderless)))
+
+(use-package marginalia
+  :ensure t
+  :init (marginalia-mode))
+
+(use-package consult
+  :ensure t)
+
+(use-package corfu
+  :ensure t
+  :init (corfu-global-mode)
+  :custom
+  (corfu-cycle t))
+
+;; (use-package embark)
+;; (use-package embark-consult)
 
 (use-package evil
   :ensure t
@@ -47,6 +69,8 @@
     :keymaps '(normal insert visual emacs)
     :prefix "SPC"
     :global-prefix "C-SPC")
+  ;;(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+  (general-def "<escape>" 'keyboard-escape-quit)
   (general-def 'normal
     ":" 'evil-repeat
     "." 'evil-ex
@@ -64,42 +88,34 @@
     "wr" '(split-window-right :which-key "new window to the right")
     "wo" '(ace-delete-other-windows :which-key "close all except")
 
-                                        ; This are keys to find something (with an UNKOWN location)
+    ;; This are keys to find something (with an UNKOWN location)
     "f" '(:ignore s :which-key "find")
     "fl" '(consult-line :which-key "line")
     "ff" '(project-find-file :which-key "file")
 
-                                        ; This are keys to jump fast to some KNOWN location
-                                        ; NOTE could also rename to "go to"
+    ;; This are keys to jump fast to some KNOWN location
+    ;; NOTE could also rename to "go to"
     "s" '(:ignore s :which-key "switch to")
     "sc" '(avy-goto-char :which-key "character")
     "sl" '(avy-goto-line :which-key "line")
     "sw" '(avy-goto-word-0 :which-key "word")
     "sb" '(consult-buffer :which-key "buffer")
-                                        ; TODO switch to package.el on emacs 28. See following link for reference:
-                                        ; https://protesilaos.com/dotemacs/#h:7862f39e-aed0-4d02-9f1e-60c4601a9734
+    ;; TODO switch to package.el on emacs 28. See following link for reference:
+    ;; https://protesilaos.com/dotemacs/#h:7862f39e-aed0-4d02-9f1e-60c4601a9734
     "sp" '(projectile-switch-project :which-key "project")
-                                        ; TODO open file vertically or horicontally
-    "sf" '(project-find-file :which-key "file")
-    ))
+    ;; TODO open file vertically or horicontally
+    "sf" '(project-find-file :which-key "file")))
 
-(use-package hydra :ensure t)
-(defhydra hydra-insert-cmds ()
-  "Commands"
-  ("ö" (insert "ö") "insert (leader) ö" :exit t)
-  ("e" execute-extended-command "execute" :exit t)
-  ("." evil-ex "evil ex" :exit t)
-  ("C-d" evil-window-delete "close window" :exit t)
-  ("wc" evil-window-delete "close window" :exit t)
-  ("o" evil-window-next "next window")
-  ("j" hydra-jump/body "Jump" :exit t)
-  ("f" nil "finished" :exit t))
-(defhydra hydra-jump ()
-  "jump"
-  ("c" avy-goto-char "to character" :exit t)
-  ("w" avy-goto-word-0 "to word" :exit t)
-  ("l" avy-goto-line :which-key "to line" :exit t)
-  ("f" nil "finished" :exit t))
+(use-package which-key
+  :ensure t
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :custom
+  (which-key-idle-delay 0.1))
+
+(use-package avy
+  :ensure t
+  :commands (avy-goto-char avy-goto-word-0 avy-goto-line))
 
 (use-package ace-window
   :ensure t
@@ -123,12 +139,24 @@
    "List of actions for `aw-dispatch-default`.")
   :bind ("M-o" . ace-window))
 
-(use-package which-key
-  :ensure t
-  :init (which-key-mode)
-  :diminish which-key-mode
-  :custom
-  (which-key-idle-delay 0.1))
+(use-package hydra :ensure t)
+
+(defhydra hydra-insert-cmds ()
+  "Commands"
+  ("ö" (insert "ö") "insert (leader) ö" :exit t)
+  ("e" execute-extended-command "execute" :exit t)
+  ("." evil-ex "evil ex" :exit t)
+  ("C-d" evil-window-delete "close window" :exit t)
+  ("wc" evil-window-delete "close window" :exit t)
+  ("o" evil-window-next "next window")
+  ("j" hydra-jump/body "Jump" :exit t)
+  ("f" nil "finished" :exit t))
+(defhydra hydra-jump ()
+  "jump"
+  ("c" avy-goto-char "to character" :exit t)
+  ("w" avy-goto-word-0 "to word" :exit t)
+  ("l" avy-goto-line :which-key "to line" :exit t)
+  ("f" nil "finished" :exit t))
 
 (use-package editorconfig
   :ensure t
@@ -139,38 +167,9 @@
   :ensure t
   :diminish projectile-mode
   :config (projectile-mode)
-  :init
-  (when (file-directory-p "~/workspace/personal")
-    (setq projectile-project-search-path '("~/workspace/personal")))
-  (setq projectile-switch-project-action #'projectile-dired))
-
-(use-package vertico
-  :ensure t
-  :init
-  (vertico-mode)
-  (setq vertico-cycle t))
-
-(use-package orderless
-  :ensure t
-  :config
-  (setq completion-styles '(orderless)))
-
-(use-package marginalia
-  :ensure t
-  :init (marginalia-mode))
-
-(use-package consult
-  :ensure t)
-
-(use-package corfu
-  :ensure t
-  :init (corfu-global-mode)
   :custom
-  (corfu-cycle t))
-
-(use-package avy
-  :ensure t
-  :commands (avy-goto-char avy-goto-word-0 avy-goto-line))
+  (projectile-project-search-path '("~/workspace/personal")))
+  ; (setq projectile-switch-project-action #'projectile-dired))
 
 (use-package wgrep
   :defer 2
@@ -188,10 +187,11 @@
   (org-log-into-drawer t)
   (org-confirm-babel-evaluate nil)
   (org-structure-template-alist
-   '(; custom
+   '(
+     ;; custom
      ("sh" . "src shell")
      ("el" . "src emacs-lisp")
-                                        ; default
+     ;; default
      ("a" . "export ascii")
      ("c" . "center")
      ("C" . "comment")
@@ -240,7 +240,6 @@
 ;; Display the cursor column in modeline
 (column-number-mode t)
 
-;; Display a ruler in programming modes at the given column
 (dolist (mode '(prog-mode-hook
                 text-mode-hook))
   (add-hook mode '(lambda()
@@ -251,8 +250,7 @@
 ;; Enable line numbers
 (global-display-line-numbers-mode t)
 ;; Disable line numbers for some modes
-(dolist (mode '(org-mode-hook
-                term-mode-hook
+(dolist (mode '(term-mode-hook
                 shell-mode-hook
                 eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
@@ -261,9 +259,8 @@
   :ensure t
   :ghook 'prog-mode-hook)
 
-; (use-package password-store) ; auth-source-pass
-; (use-package embark)
-; (use-package embark-consult)
-; (use-package hercules)
-; (use-package direnv) ; also enable lorri service via home-manager
-; (use-package evil-snipe)
+;; (use-package password-store) ; auth-source-pass
+
+;; (use-package hercules)
+;; (use-package direnv) ; also enable lorri service via home-manager
+;; (use-package evil-snipe)
