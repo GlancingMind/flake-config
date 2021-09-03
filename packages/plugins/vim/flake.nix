@@ -2,7 +2,7 @@
   description = "Vim plugins";
 
   inputs = {
-    nixpkgs.url = github:NixOS/nixpkgs/nixos-20.09;
+    nixpkgs.url = github:NixOS/nixpkgs/nixos-21.05;
 
     # Plugins
     "gina.vim" = {
