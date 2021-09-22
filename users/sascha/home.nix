@@ -58,6 +58,7 @@
     #pistol
     #jetbrains.goland
     youtube-dl
+    gimp
   ];
 
   programs.direnv = {
