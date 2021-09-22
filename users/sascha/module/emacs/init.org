@@ -22,6 +22,133 @@
      (setq use-package-always-ensure t)
    #+end_src
 
+** Keybindings
+
+   #+begin_src emacs-lisp
+     (use-package general
+       :ensure t
+       :config
+       (general-create-definer custom-leader-keys
+         :keymaps '(normal insert visual emacs)
+         :prefix "SPC"
+         :global-prefix "C-SPC")
+       (custom-leader-keys
+         "a" '(:ignore a :which-key "appearance")
+         "at" '(consult-theme :which-key "choose theme")
+         "as" '(text-scale-adjust :which-key "adjust text size")
+
+         "w" '(:ignore a :which-key "window")
+         "wd" '(ace-delete-window :which-key "delete")
+         "ws" '(ace-swap-window :which-key "swap")
+         "wj" '(ace-select-window :which-key "select")
+         "wb" '(split-window-below :which-key "new window below")
+         "wr" '(split-window-right :which-key "new window to the right")
+         "wo" '(ace-delete-other-windows :which-key "close all except")
+
+         ;; This are keys to find something (with an UNKOWN location)
+         "f" '(:ignore s :which-key "find")
+         "fl" '(consult-line :which-key "line")
+         "ff" '(project-find-file :which-key "file")
+
+         ;; This are keys to jump fast to some KNOWN location
+         ;; NOTE could also rename to "go to"
+         "s" '(:ignore s :which-key "switch to")
+         "sc" '(avy-goto-char :which-key "character")
+         "sl" '(avy-goto-line :which-key "line")
+         "sw" '(avy-goto-word-0 :which-key "word")
+         "sb" '(consult-buffer :which-key "buffer")
+         "sp" '(project-switch-project :which-key "project")
+         ;; TODO open file vertically or horicontally
+         "sf" '(project-find-file :which-key "file")))
+   #+end_src
+
+   #+begin_src emacs-lisp
+     (use-package evil
+       :ensure t
+       :custom
+       (evil-want-keybinding nil) ; will use evil-collection for this
+       (evil-want-C-u-scroll t)
+       :config
+       (evil-mode 1)
+       ;; Start following modes in normal mode
+       (evil-set-initial-state 'messages-buffer-mode 'normal)
+       (evil-set-initial-state 'dashboard-mode 'normal)
+       (general-def "<escape>" 'keyboard-escape-quit)
+       (general-def 'insert "ö" 'hydra-insert-cmds/body)
+       (general-def 'motion
+         ;; Move through soft wrapped lines as if they where hard wrapped
+         "j" 'evil-next-visual-line
+         "k" 'evil-previous-visual-line)
+       (general-def 'normal
+         ":" 'evil-repeat
+         "." 'evil-ex
+         "C-i" 'evil-jump-forward
+         "C-p" 'consult-buffer))
+
+     (use-package evil-collection
+       :ensure t
+       :after evil
+       :config
+       (evil-collection-init))
+   #+end_src
+
+*** Within Buffers
+
+    #+begin_src emacs-lisp
+      (use-package avy
+        :ensure t
+        :commands (avy-goto-char avy-goto-word-0 avy-goto-line))
+    #+end_src
+
+*** Between windows
+
+    #+begin_src emacs-lisp
+      (use-package ace-window
+        :ensure t
+        :custom
+        (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+        (aw-scope 'frame)
+        (aw-minibuffer-flag t)
+        (aw-dispatch-always t)
+        (aw-dispatch-alist
+         '(
+           (?x aw-delete-window "delete")
+           (?m aw-swap-window "swap")
+           (?M aw-move-window "move")
+           (?n aw-flip-window "aw-flip-window")
+           (?u aw-switch-buffer-other-window "switch buffer other window")
+           (?f aw-split-window-fair "split fair")
+           (?v aw-split-window-vert "split vertical")
+           (?r aw-split-window-horz "split horizontal (to the _r_ight)")
+           (?o aw-delete-other-windows "delete other windows")
+           (?? aw-show-dispatch-help "help"))
+         "List of actions for `aw-dispatch-default`.")
+        :bind ("M-o" . ace-window))
+    #+end_src
+
+*** Hydras
+
+    #+begin_src emacs-lisp
+      (use-package hydra :ensure t)
+
+      (defhydra hydra-insert-cmds ()
+        "Commands"
+        ("ö" (insert "ö") "insert (leader) ö" :exit t)
+        ("e" execute-extended-command "execute" :exit t)
+        ("." evil-ex "evil ex" :exit t)
+        ("C-d" evil-window-delete "close window" :exit t)
+        ("wc" evil-window-delete "close window" :exit t)
+        ("o" evil-window-next "next window")
+        ("j" hydra-jump/body "Jump" :exit t)
+        ("f" nil "finished" :exit t))
+      (defhydra hydra-jump ()
+        "jump"
+        ("c" avy-goto-char "to character" :exit t)
+        ("w" avy-goto-word-0 "to word" :exit t)
+        ("l" avy-goto-line "to line" :exit t)
+        ("f" nil "finished" :exit t))
+    #+end_src
+
 ** Completion System
 
 *** Vertico
@@ -71,8 +198,27 @@
 
     #+begin_src emacs-lisp
       (use-package consult
-        :ensure t)
+        :ensure t
+        :defer t)
     #+end_src
+
+**** Consult-Dir
+
+     #+begin_src emacs-lisp
+       (use-package consult-dir
+         :ensure t
+         :after consult
+         :custom
+         (consult-dir-default-command 'project-find-file)
+         :config
+         (recentf-mode)
+         :general
+         (:keymaps 'insert
+                   "C-x C-d" 'consult-dir)
+         (:keymaps 'vertico-map
+                   "C-x C-d" 'consult-dir
+                   "C-x C-j" 'consult-dir-jump-file))
+     #+end_src
 
 *** Corfu
 
@@ -83,7 +229,15 @@
         :ensure t
         :init (corfu-global-mode)
         :custom
-        (corfu-cycle t))
+        (corfu-cycle t)
+        :general
+        (general-def 'insert "C-n" 'completion-at-point)
+        (:keymaps 'corfu-map
+                  [remap completion-at-point] 'corfu-next
+                  [remap evil-complete-next] 'corfu-next
+                  [remap evil-complete-previous] 'corfu-previous
+                  "C-n"  'corfu-next
+                  "C-p"  'corfu-previous))
     #+end_src
 
 *** TODO Actions for completion items
@@ -93,166 +247,64 @@
       ;; (use-package embark-consult)
     #+end_src
 
-* Keybindings
+* Help
 
-  #+begin_src emacs-lisp
-    (use-package evil
-      :ensure t
-      :custom
-      (evil-want-keybinding nil) ; will use evil-collection for this
-      (evil-want-C-u-scroll t)
-      :config
-      (evil-mode 1)
-      ;; Move through soft wrapped lines as if they where hard wrapped lines
-      (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-      (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-      (evil-global-set-key 'insert "ö" 'hydra-insert-cmds/body)
+** Helpful
 
-      ;; Start following modes in normal mode
-      (evil-set-initial-state 'messages-buffer-mode 'normal)
-      (evil-set-initial-state 'dashboard-mode 'normal))
-
-    (use-package evil-collection
-      :ensure t
-      :after evil
-      :config
-      (evil-collection-init))
-
-    (use-package general
-      :ensure t
-      :config
-      (general-create-definer custom-leader-keys
-        :keymaps '(normal insert visual emacs)
-        :prefix "SPC"
-        :global-prefix "C-SPC")
-      ;;(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-      (general-def "<escape>" 'keyboard-escape-quit)
-      (general-def 'normal
-        ":" 'evil-repeat
-        "." 'evil-ex
-        "C-p" 'consult-buffer)
-      (custom-leader-keys
-        "a" '(:ignore a :which-key "appearance")
-        "at" '(consult-theme :which-key "choose theme")
-        "as" '(text-scale-adjust :which-key "adjust text size")
-
-        "w" '(:ignore a :which-key "window")
-        "wd" '(ace-delete-window :which-key "delete")
-        "ws" '(ace-swap-window :which-key "swap")
-        "wj" '(ace-select-window :which-key "select")
-        "wb" '(split-window-below :which-key "new window below")
-        "wr" '(split-window-right :which-key "new window to the right")
-        "wo" '(ace-delete-other-windows :which-key "close all except")
-
-        ;; This are keys to find something (with an UNKOWN location)
-        "f" '(:ignore s :which-key "find")
-        "fl" '(consult-line :which-key "line")
-        "ff" '(project-find-file :which-key "file")
-
-        ;; This are keys to jump fast to some KNOWN location
-        ;; NOTE could also rename to "go to"
-        "s" '(:ignore s :which-key "switch to")
-        "sc" '(avy-goto-char :which-key "character")
-        "sl" '(avy-goto-line :which-key "line")
-        "sw" '(avy-goto-word-0 :which-key "word")
-        "sb" '(consult-buffer :which-key "buffer")
-        ;; TODO switch to package.el on emacs 28. See following link for reference:
-        ;; https://protesilaos.com/dotemacs/#h:7862f39e-aed0-4d02-9f1e-60c4601a9734
-        "sp" '(projectile-switch-project :which-key "project")
-        ;; TODO open file vertically or horicontally
-        "sf" '(project-find-file :which-key "file")))
-
-    (use-package which-key
-      :ensure t
-      :init (which-key-mode)
-      :diminish which-key-mode
-      :custom
-      (which-key-idle-delay 0.1))
-  #+end_src
-
-** Within Buffers
+   Helpful adds additional (good to know) information to the help buffer.
 
    #+begin_src emacs-lisp
-     (use-package avy
-       :ensure t
-       :commands (avy-goto-char avy-goto-word-0 avy-goto-line))
+     (use-package helpful
+       :general
+       ([remap describe-function] 'helpful-function)
+       ([remap describe-symbol] 'helpful-command)
+       ([remap describe-variable] 'helpful-variable)
+       ([remap describe-key] 'helpful-key))
    #+end_src
 
-** Between windows
+** Which Key
+
+   Provides a popup menu, which displays all possible keybindings that can be
+   used.
 
    #+begin_src emacs-lisp
-     (use-package ace-window
+     (use-package which-key
        :ensure t
+       :init (which-key-mode)
+       :diminish which-key-mode
        :custom
-       (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-       (aw-scope 'frame)
-       (aw-minibuffer-flag t)
-       (aw-dispatch-always t)
-       (aw-dispatch-alist
-        '(
-          (?x aw-delete-window "delete")
-          (?m aw-swap-window "swap")
-          (?M aw-move-window "move")
-          (?n aw-flip-window "aw-flip-window")
-          (?u aw-switch-buffer-other-window "switch buffer other window")
-          (?f aw-split-window-fair "split fair")
-          (?v aw-split-window-vert "split vertical")
-          (?r aw-split-window-horz "split horizontal (to the _r_ight)")
-          (?o aw-delete-other-windows "delete other windows")
-          (?? aw-show-dispatch-help "help"))
-        "List of actions for `aw-dispatch-default`.")
-       :bind ("M-o" . ace-window))
-   #+end_src
-
-** Hydras
-
-   #+begin_src emacs-lisp
-     (use-package hydra :ensure t)
-
-     (defhydra hydra-insert-cmds ()
-       "Commands"
-       ("ö" (insert "ö") "insert (leader) ö" :exit t)
-       ("e" execute-extended-command "execute" :exit t)
-       ("." evil-ex "evil ex" :exit t)
-       ("C-d" evil-window-delete "close window" :exit t)
-       ("wc" evil-window-delete "close window" :exit t)
-       ("o" evil-window-next "next window")
-       ("j" hydra-jump/body "Jump" :exit t)
-       ("f" nil "finished" :exit t))
-     (defhydra hydra-jump ()
-       "jump"
-       ("c" avy-goto-char "to character" :exit t)
-       ("w" avy-goto-word-0 "to word" :exit t)
-       ("l" avy-goto-line :which-key "to line" :exit t)
-       ("f" nil "finished" :exit t))
+       (which-key-idle-delay 0.1))
    #+end_src
 
 * Development
 
-** Editorconfig
+** Project
 
-   Respect project settings defined within a .editorconfig-file.
+   #+begin_src emacs-lisp
 
-  #+begin_src emacs-lisp
-    (use-package editorconfig
-      :ensure t
-      :config
-      (editorconfig-mode 1))
-  #+end_src
+   #+end_src
 
-** Projectile
+** Environment
 
-   Used to switch between projects.
+*** Editorconfig
 
-  #+begin_src emacs-lisp
-    (use-package projectile
-      :ensure t
-      :diminish projectile-mode
-      :config (projectile-mode)
-      :custom
-      (projectile-project-search-path '("~/workspace/personal")))
-      ; (setq projectile-switch-project-action #'projectile-dired))
-  #+end_src
+    Respect project settings defined within a .editorconfig-file.
+
+    #+begin_src emacs-lisp
+      (use-package editorconfig
+        :ensure t
+        :config
+        (editorconfig-mode 1))
+    #+end_src
+
+*** Direnv
+
+    #+begin_src emacs-lisp
+      (use-package direnv
+        :ensure t
+        :config
+        (direnv-mode))
+    #+end_src
 
 ** Refactoring
 
@@ -264,17 +316,55 @@
 
 ** Version Control
 
-   #+begin_src emacs-lisp
-     (use-package magit
-       :defer 2
-       :ensure t)
-   #+end_src
+*** Magit
+
+    #+begin_src emacs-lisp
+      (use-package magit
+        :defer 2
+        :ensure t
+        :custom
+        (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+    #+end_src
+
+** Languages
+
+*** Language Server
+
+    #+begin_src emacs-lisp
+      (use-package eglot
+        :ensure t
+        :ghook
+        ('go-mode-hook #'eglot-ensure))
+
+      (use-package consult-eglot
+        :ensure t
+        :after eglot)
+    #+end_src
+
+*** TODO Configure Go
+
+    #+begin_src emacs-lisp
+      (use-package go-mode
+        :ensure t
+        :mode
+        ("\\.go\\'" . go-mode)
+        :interpreter
+        ("go" . go-mode)
+        )
+    #+end_src
 
 * Org-Mode
 
   #+begin_src emacs-lisp
+    (defun load-org-tempo ()
+      (require 'org-tempo))
+
     (use-package org
       :ensure t
+      :mode
+      ("\\.org\\'" . org-mode)
+      :interpreter
+      ("org" . org-mode)
       :custom
       (org-ellipsis " ▼")
       (org-log-done 'time)
@@ -298,13 +388,12 @@
          ("v" . "verse")))
       :gfhook
       #'visual-line-mode
+      #'load-org-tempo
       :config
       (org-babel-do-load-languages
        'org-babel-load-languages
        '((emacs-lisp . t)
          (shell . t))))
-
-    (require 'org-tempo)
   #+end_src
 
 * Appearance
@@ -379,10 +468,15 @@
    #+begin_src emacs-lisp
      (use-package rainbow-delimiters
        :ensure t
-       :ghook 'prog-mode-hook)
+       :ghook
+       'prog-mode-hook)
    #+end_src
 
 * TODO Credential Managment
+
+  #+begin_src emacs-lisp
+    (setq epg-pinentry-mode 'loopback)
+  #+end_src
 
   #+begin_src emacs-lisp
     ;; (use-package password-store) ; auth-source-pass
@@ -392,6 +486,18 @@
 
   #+begin_src emacs-lisp
     ;; (use-package hercules)
-    ;; (use-package direnv) ; also enable lorri service via home-manager
-    ;; (use-package evil-snipe)
   #+end_src
+
+* Profiling
+
+  #+begin_src emacs-lisp
+    (use-package esup
+      :ensure t
+      :custom
+      ;; Work around a bug where esup tries to step into the byte-compiled
+      ;; version of `cl-lib', and fails horribly.
+      ;; Ref: https://github.com/jschaf/esup/issues/54#issuecomment-651247749
+      esup-depth 0)
+  #+end_src
+
+  #+RESULTS:

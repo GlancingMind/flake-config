@@ -13,55 +13,6 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-(use-package vertico
-  :ensure t
-  :init
-  (vertico-mode)
-  (setq vertico-cycle t))
-
-(use-package orderless
-  :ensure t
-  :config
-  (setq completion-styles '(orderless)))
-
-(use-package marginalia
-  :ensure t
-  :init (marginalia-mode))
-
-(use-package consult
-  :ensure t)
-
-(use-package corfu
-  :ensure t
-  :init (corfu-global-mode)
-  :custom
-  (corfu-cycle t))
-
-;; (use-package embark)
-;; (use-package embark-consult)
-
-(use-package evil
-  :ensure t
-  :custom
-  (evil-want-keybinding nil) ; will use evil-collection for this
-  (evil-want-C-u-scroll t)
-  :config
-  (evil-mode 1)
-  ;; Move through soft wrapped lines as if they where hard wrapped lines
-  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-  (evil-global-set-key 'insert "ö" 'hydra-insert-cmds/body)
-
-  ;; Start following modes in normal mode
-  (evil-set-initial-state 'messages-buffer-mode 'normal)
-  (evil-set-initial-state 'dashboard-mode 'normal))
-
-(use-package evil-collection
-  :ensure t
-  :after evil
-  :config
-  (evil-collection-init))
-
 (use-package general
   :ensure t
   :config
@@ -69,12 +20,6 @@
     :keymaps '(normal insert visual emacs)
     :prefix "SPC"
     :global-prefix "C-SPC")
-  ;;(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-  (general-def "<escape>" 'keyboard-escape-quit)
-  (general-def 'normal
-    ":" 'evil-repeat
-    "." 'evil-ex
-    "C-p" 'consult-buffer)
   (custom-leader-keys
     "a" '(:ignore a :which-key "appearance")
     "at" '(consult-theme :which-key "choose theme")
@@ -100,18 +45,37 @@
     "sl" '(avy-goto-line :which-key "line")
     "sw" '(avy-goto-word-0 :which-key "word")
     "sb" '(consult-buffer :which-key "buffer")
-    ;; TODO switch to package.el on emacs 28. See following link for reference:
-    ;; https://protesilaos.com/dotemacs/#h:7862f39e-aed0-4d02-9f1e-60c4601a9734
-    "sp" '(projectile-switch-project :which-key "project")
+    "sp" '(project-switch-project :which-key "project")
     ;; TODO open file vertically or horicontally
     "sf" '(project-find-file :which-key "file")))
 
-(use-package which-key
+(use-package evil
   :ensure t
-  :init (which-key-mode)
-  :diminish which-key-mode
   :custom
-  (which-key-idle-delay 0.1))
+  (evil-want-keybinding nil) ; will use evil-collection for this
+  (evil-want-C-u-scroll t)
+  :config
+  (evil-mode 1)
+  ;; Start following modes in normal mode
+  (evil-set-initial-state 'messages-buffer-mode 'normal)
+  (evil-set-initial-state 'dashboard-mode 'normal)
+  (general-def "<escape>" 'keyboard-escape-quit)
+  (general-def 'insert "ö" 'hydra-insert-cmds/body)
+  (general-def 'motion
+    ;; Move through soft wrapped lines as if they where hard wrapped
+    "j" 'evil-next-visual-line
+    "k" 'evil-previous-visual-line)
+  (general-def 'normal
+    ":" 'evil-repeat
+    "." 'evil-ex
+    "C-i" 'evil-jump-forward
+    "C-p" 'consult-buffer))
+
+(use-package evil-collection
+  :ensure t
+  :after evil
+  :config
+  (evil-collection-init))
 
 (use-package avy
   :ensure t
@@ -155,21 +119,84 @@
   "jump"
   ("c" avy-goto-char "to character" :exit t)
   ("w" avy-goto-word-0 "to word" :exit t)
-  ("l" avy-goto-line :which-key "to line" :exit t)
+  ("l" avy-goto-line "to line" :exit t)
   ("f" nil "finished" :exit t))
+
+(use-package vertico
+  :ensure t
+  :init
+  (vertico-mode)
+  (setq vertico-cycle t))
+
+(use-package orderless
+  :ensure t
+  :config
+  (setq completion-styles '(orderless)))
+
+(use-package marginalia
+  :ensure t
+  :init (marginalia-mode))
+
+(use-package consult
+  :ensure t
+  :defer t)
+
+(use-package consult-dir
+  :ensure t
+  :after consult
+  :custom
+  (consult-dir-default-command 'project-find-file)
+  :config
+  (recentf-mode)
+  :general
+  (:keymaps 'insert
+            "C-x C-d" 'consult-dir)
+  (:keymaps 'vertico-map
+            "C-x C-d" 'consult-dir
+            "C-x C-j" 'consult-dir-jump-file))
+
+(use-package corfu
+  :ensure t
+  :init (corfu-global-mode)
+  :custom
+  (corfu-cycle t)
+  :general
+  (general-def 'insert "C-n" 'completion-at-point)
+  (:keymaps 'corfu-map
+            [remap completion-at-point] 'corfu-next
+            [remap evil-complete-next] 'corfu-next
+            [remap evil-complete-previous] 'corfu-previous
+            "C-n"  'corfu-next
+            "C-p"  'corfu-previous))
+
+;; (use-package embark)
+;; (use-package embark-consult)
+
+(use-package helpful
+  :general
+  ([remap describe-function] 'helpful-function)
+  ([remap describe-symbol] 'helpful-command)
+  ([remap describe-variable] 'helpful-variable)
+  ([remap describe-key] 'helpful-key))
+
+(use-package which-key
+  :ensure t
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :custom
+  (which-key-idle-delay 0.1))
+
+
 
 (use-package editorconfig
   :ensure t
   :config
   (editorconfig-mode 1))
 
-(use-package projectile
+(use-package direnv
   :ensure t
-  :diminish projectile-mode
-  :config (projectile-mode)
-  :custom
-  (projectile-project-search-path '("~/workspace/personal")))
-  ; (setq projectile-switch-project-action #'projectile-dired))
+  :config
+  (direnv-mode))
 
 (use-package wgrep
   :defer 2
@@ -177,10 +204,36 @@
 
 (use-package magit
   :defer 2
-  :ensure t)
+  :ensure t
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+
+(use-package eglot
+  :ensure t
+  :ghook
+  ('go-mode-hook #'eglot-ensure))
+
+(use-package consult-eglot
+  :ensure t
+  :after eglot)
+
+(use-package go-mode
+  :ensure t
+  :mode
+  ("\\.go\\'" . go-mode)
+  :interpreter
+  ("go" . go-mode)
+  )
+
+(defun load-org-tempo ()
+  (require 'org-tempo))
 
 (use-package org
   :ensure t
+  :mode
+  ("\\.org\\'" . org-mode)
+  :interpreter
+  ("org" . org-mode)
   :custom
   (org-ellipsis " ▼")
   (org-log-done 'time)
@@ -204,13 +257,12 @@
      ("v" . "verse")))
   :gfhook
   #'visual-line-mode
+  #'load-org-tempo
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
      (shell . t))))
-
-(require 'org-tempo)
 
 (setq ring-bell-function 'ignore)   ; Disable alarm bell
 (setq inhibit-startup-message t)    ; Remove startup message
@@ -257,10 +309,19 @@
 
 (use-package rainbow-delimiters
   :ensure t
-  :ghook 'prog-mode-hook)
+  :ghook
+  'prog-mode-hook)
+
+(setq epg-pinentry-mode 'loopback)
 
 ;; (use-package password-store) ; auth-source-pass
 
 ;; (use-package hercules)
-;; (use-package direnv) ; also enable lorri service via home-manager
-;; (use-package evil-snipe)
+
+(use-package esup
+  :ensure t
+  :custom
+  ;; Work around a bug where esup tries to step into the byte-compiled
+  ;; version of `cl-lib', and fails horribly.
+  ;; Ref: https://github.com/jschaf/esup/issues/54#issuecomment-651247749
+  esup-depth 0)
