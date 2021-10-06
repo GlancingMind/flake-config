@@ -54,11 +54,12 @@
     #chromium
     #vscodium
     fselect
-    vgrep delta amber fastmod # sd sad
+    vgrep delta amber fastmod unstable.sad # sd sad
     #pistol
     #jetbrains.goland
     youtube-dl
-    gimp
+    zip
+    imv gimp
   ];
 
   programs.direnv = {
