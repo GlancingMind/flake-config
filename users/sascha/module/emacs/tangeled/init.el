@@ -211,7 +211,8 @@
 (use-package eglot
   :ensure t
   :ghook
-  ('go-mode-hook #'eglot-ensure))
+  ('go-mode-hook #'eglot-ensure)
+  ('nix-mode-hook #'eglot-ensure))
 
 (use-package consult-eglot
   :ensure t
@@ -224,6 +225,13 @@
   :interpreter
   ("go" . go-mode)
   )
+
+(use-package nix-mode
+  :ensure t
+  :mode
+  ("\\.nix\\'" . nix-mode)
+  :interpreter
+  ("rnix-lsp" . nix-mode))
 
 (defun load-org-tempo ()
   (require 'org-tempo))
