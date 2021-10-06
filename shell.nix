@@ -10,6 +10,7 @@ in pkgs.stdenv.mkDerivation {
   buildInputs = [
     pkgs.gnumake
     pkgs.vim
+    pkgs.rnix-lsp
     pkgs.git # required by flake
     (pkgs.writeScriptBin "nixFlakes" ''
       #!/usr/bin/env bash
