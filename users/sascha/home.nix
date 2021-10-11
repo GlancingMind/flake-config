@@ -54,7 +54,8 @@
     #chromium
     #vscodium
     fselect
-    vgrep delta amber fastmod unstable.sad # sd sad
+    peco
+    vgrep delta amber fastmod unstablePkgs.sad # sd sad
     #pistol
     #jetbrains.goland
     youtube-dl

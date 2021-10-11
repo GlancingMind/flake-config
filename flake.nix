@@ -2,6 +2,11 @@
   description = "A very basic flake";
 
   inputs = {
+    flake-utils.url = github:numtide/flake-utils;
+    flake-compat = {
+      url = github:edolstra/flake-compat;
+      flake = false;
+    };
     stable.url = github:NixOS/nixpkgs/nixos-21.05;
     unstable.url = github:NixOS/nixpkgs/nixos-unstable;
     home-manager = {
@@ -14,7 +19,30 @@
     };
   };
 
-  outputs = { self, customPkgs, home-manager, stable, unstable }: {
+  outputs = { self, flake-compat, flake-utils, customPkgs, home-manager, stable, unstable }:
+  let
+    system = "x86_64-linux";
+    stablePkgs = import stable { inherit system; };
+    unstablePkgs = import unstable { inherit system; };
+    lib = stable.lib;
+  in {
+    devShell.${system} = stablePkgs.mkShell {
+      name = "system-setup-shell";
+
+      buildInputs = [
+        stablePkgs.git # required by flake
+        stablePkgs.gnumake
+        stablePkgs.rnix-lsp
+        stablePkgs.esh
+        (stablePkgs.writeScriptBin "nixFlakes" ''
+            #!/usr/bin/env bash
+            exec ${stablePkgs.nixFlakes}/bin/nix \
+            --experimental-features "nix-command flakes" "$@"
+        '')
+        (stablePkgs.nixos { nix.package = stablePkgs.nixFlakes; }).nixos-rebuild
+      ];
+    };
+
     overlays = {
       packages = final: prev: customPkgs.packages."x86_64-linux";
     };
@@ -25,8 +53,8 @@
         services = import ./services;
       };
     in {
-      laptop = stable.lib.nixosSystem {
-        system = "x86_64-linux";
+      laptop = lib.nixosSystem {
+        inherit system;
         inherit specialArgs;
         modules = [
           ./systems/laptop
@@ -35,7 +63,7 @@
             nixpkgs.overlays = [
               (final: prev: {
                 packages = self.overlays.packages final prev;
-                unstable = import unstable { system = "x86_64-linux"; };
+                inherit unstablePkgs;
               })
             ];
           }
@@ -44,19 +72,18 @@
       };
     };
 
-    laptop = self.nixosConfigurations.laptop.config.system.build.toplevel;
-
     apps."x86_64-linux".repl = let
-      pkgs = import stable { system = "x86_64-linux"; };
-      repl = pkgs.writeShellScriptBin "repl" ''
-        confnix=$(mktemp)
-        echo "builtins.getFlake (toString $(git rev-parse --show-toplevel))" >$confnix
-        trap "rm $confnix" EXIT
-        nix repl $confnix
+      repl = stablePkgs.writeShellScriptBin "repl" ''
+          confnix=$(mktemp)
+          echo "builtins.getFlake (toString $(git rev-parse --show-toplevel))" >$confnix
+          trap "rm $confnix" EXIT
+          nix repl $confnix
       '';
     in {
       type = "app";
       program = "${toString repl}/bin/repl";
     };
+
+    laptop = self.nixosConfigurations.laptop.config.system.build.toplevel;
   };
 }

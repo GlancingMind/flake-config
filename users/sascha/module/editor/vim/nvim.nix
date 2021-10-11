@@ -15,7 +15,7 @@ in
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
-    package = pkgs.unstable.neovim-unwrapped;
+    package = pkgs.unstablePkgs.neovim-unwrapped;
     extraConfig = builtins.readFile ./config/nvimrc;
     plugins = [
       {
@@ -56,8 +56,8 @@ in
         plugin = pkgs.vimPlugins.vimwiki;
         config = builtins.readFile ./config/vimwiki.vim;
       }
-      #pkgs.unstable.vimPlugins.telescope-nvim
-      #pkgs.unstable.vimPlugins.telescope-fzy-native-nvim
+      #pkgs.unstablePkgs.vimPlugins.telescope-nvim
+      #pkgs.unstablePkgs.vimPlugins.telescope-fzy-native-nvim
       #{
       #  plugin = hardmode;
       #  #config = builtins.readFile ./config/hardmode.vim
