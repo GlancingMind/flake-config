@@ -12,24 +12,27 @@ in
 
   programs.neovim = {
     enable = true;
-    package = pkgs.unstable.neovim-unwrapped;
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
+    package = pkgs.unstable.neovim-unwrapped;
     extraConfig = builtins.readFile ./config/nvimrc;
-    extraPackages = [
-      # Required for vim-go plugin
-      pkgs.go
-      pkgs.gopls
-    ];
     plugins = [
-      pkgs.vimPlugins.vim-surround
-      pkgs.vimPlugins.vim-fugitive
-      pkgs.vimPlugins.vim-go
       {
         plugin = pkgs.vimPlugins.gruvbox;
         config = builtins.readFile ./config/gruvbox.vim;
       }
+      {
+        plugin = pkgs.vimPlugins.nvim-lspconfig;
+        config = builtins.readFile ./config/lspconfig.vim;
+      }
+      {
+        plugin = pkgs.vimPlugins.lspsaga-nvim;
+        config = builtins.readFile ./config/lspsaga.vim;
+      }
+      pkgs.vimPlugins.vim-surround
+      pkgs.vimPlugins.vim-fugitive
+      pkgs.vimPlugins.vim-go
       trackedPlugins."gina.vim"
       trackedPlugins.emmet-vim
       trackedPlugins.vim-nix
