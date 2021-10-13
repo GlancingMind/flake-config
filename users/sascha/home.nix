@@ -49,6 +49,7 @@
     hledger hledger-ui
     w3m
     libvirt vagrant docker-compose
+    gnumake
     vis dvtm abduco #as Vim and Tmux alternative
     zathura
     #chromium
