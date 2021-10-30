@@ -25,6 +25,8 @@ in {
 
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
     "goland"
+    "brgenml1lpr"
+    "brgenml1cupswrapper"
   ];
 
   imports = [
