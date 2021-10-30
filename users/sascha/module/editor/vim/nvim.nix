@@ -8,6 +8,7 @@ in
     fzy fd ripgrep
     # Add support for --remote and --servername cli-flags
     neovim-remote
+    nerdfonts
   ];
 
   programs.neovim = {
@@ -26,6 +27,16 @@ in
         plugin = pkgs.vimPlugins.nvim-lspconfig;
         config = builtins.readFile ./config/lspconfig.vim;
       }
+      # NOTE have to use trackedPlugins, as these plugins seem not to load...
+      trackedPlugins.hop-nvim
+      trackedPlugins.nvim-lspkind
+      trackedPlugins.nvim-cmp
+      trackedPlugins.cmp-nvim-lsp
+      trackedPlugins.cmp-buffer
+      #pkgs.vimPlugins.lspkind-nvim
+      #pkgs.unstablePkgs.vimPlugins.nvim-cmp
+      #pkgs.unstablePkgs.vimPlugins.cmp-nvim-lsp
+      #pkgs.unstablePkgs.vimPlugins.cmp-buffer
       {
         plugin = pkgs.vimPlugins.lspsaga-nvim;
         config = builtins.readFile ./config/lspsaga.vim;

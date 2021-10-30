@@ -36,7 +36,7 @@ nnoremap <silent> <leader>gs <Cmd>Lspsaga signature_help<CR>
 nnoremap <silent> <leader>rs <Cmd>Lspsaga rename<CR>
 
 " preview definition
-nnoremap <silent> pd :Lspsaga preview_definition<CR>
+nnoremap <silent> <leader>pd :Lspsaga preview_definition<CR>
 
 " show diagnostics
 nnoremap <silent> <leader>sd :Lspsaga show_line_diagnostics<CR>

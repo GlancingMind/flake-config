@@ -5,6 +5,36 @@
     nixpkgs.url = github:NixOS/nixpkgs/nixos-21.05;
 
     # Plugins
+    "hop-nvim" = {
+      type = "github";
+      owner = "phaazon";
+      repo = "hop.nvim";
+      flake = false;
+    };
+    "nvim-lspkind" = {
+      type = "github";
+      owner = "onsails";
+      repo = "lspkind-nvim";
+      flake = false;
+    };
+    "nvim-cmp" = {
+      type = "github";
+      owner = "hrsh7th";
+      repo = "nvim-cmp";
+      flake = false;
+    };
+    "cmp-nvim-lsp" = {
+      type = "github";
+      owner = "hrsh7th";
+      repo = "cmp-nvim-lsp";
+      flake = false;
+    };
+    "cmp-buffer" = {
+      type = "github";
+      owner = "hrsh7th";
+      repo = "cmp-buffer";
+      flake = false;
+    };
     "gina.vim" = {
       type = "github";
       owner = "lambdalisue";
