@@ -1,0 +1,36 @@
+"<%= $email %>" = {
+  address = "<%= $email %>";
+  userName = "";
+  realName = "";
+  passwordCommand= "pass <%= personal/email/$email %>";
+
+  folders = {
+    inbox = "INBOX";
+    sent = "Sent";
+    drafts = "Draft";
+    trash = "Trash";
+  };
+
+  imap = {
+    host = "imap.mail.yahoo.com";
+    port = 993;
+    tls = {
+      enable = true;
+      useStartTls = false;
+    };
+  };
+
+  smtp = {
+    host = "smtp.mail.yahoo.com";
+    port = 587;
+    tls.enable = true;
+    tls.useStartTls = true;
+  };
+
+  mbsync = {
+    enable = true;
+    create = "maildir";
+  };
+  msmtp.enable = true;
+  notmuch.enable = true;
+};

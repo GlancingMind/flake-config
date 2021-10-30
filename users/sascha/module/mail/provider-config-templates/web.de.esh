@@ -1,0 +1,40 @@
+"<%= $email %>" = let
+  sha256_ofPrimaryEmail = "0e82e92556a8550fa5b581e43ff9936d02ac706d85004f6c74a426aa4cae69e8";
+  isPrimaryEmail = sha256_ofPrimaryEmail == builtins.hashString "sha256";
+in {
+  primary = isPrimaryEmail "<%= $email %>";
+  address = "<%= $email %>";
+  userName = "";
+  realName = "";
+  passwordCommand= "pass <%= personal/email/$email %>";
+
+  folders = {
+    inbox = "INBOX";
+    sent = "Gesendet";
+    drafts = "Entwurf";
+    trash = "Papierkorb";
+  };
+
+  imap = {
+    host = "imap.web.de";
+    port = 993;
+    tls = {
+      enable = true;
+      useStartTls = false;
+    };
+  };
+
+  smtp = {
+    host = "smtp.web.de";
+    port = 587;
+    tls.enable = true;
+    tls.useStartTls = true;
+  };
+
+  mbsync = {
+    enable = true;
+    create = "maildir";
+  };
+  msmtp.enable = true;
+  notmuch.enable = true;
+};

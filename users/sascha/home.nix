@@ -6,7 +6,7 @@
   imports = [
     ./role/wayland/sway.nix
     #./role/x11/i3.nix
-    #./module/mail.nix
+    #./module/mail/generated/mail.nix
     #./module/surfraw.nix
     ./module/obs.nix
     #./module/editor/vim/vim.nix

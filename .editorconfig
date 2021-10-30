@@ -15,11 +15,17 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
 
+[{m,M,GNUm}akefile]
+indent_style = tab
+
 [*.nix]
 indent_size = 2
 
 [*.el]
 indent_size = 2
 
-[{m,M,GNUm}akefile]
-indent_style = tab
+[*.sh]
+indent_size = 2
+
+[*.esh]
+indent_size = 2

@@ -1,0 +1,36 @@
+"<%= $email %>" = {
+  address = "<%= $email %>";
+  userName = "";
+  realName = "";
+  passwordCommand= "pass <%= personal/email/$email %>";
+
+  folders = {
+    inbox = "INBOX";
+    sent = "INBOX/Sent";
+    drafts = "INBOX/Drafts";
+    trash = "INBOX/Trash";
+  };
+
+  imap = {
+    host = "mailgate.thm.de";
+    port = 993;
+    tls = {
+      enable = true;
+      useStartTls = false;
+    };
+  };
+
+  smtp = {
+    host = "mailgate.thm.de";
+    port = 587;
+    tls.enable = true;
+    tls.useStartTls = true;
+  };
+
+  mbsync = {
+    enable = true;
+    create = "maildir";
+  };
+  msmtp.enable = true;
+  notmuch.enable = true;
+};
