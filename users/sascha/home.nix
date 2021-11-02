@@ -13,6 +13,7 @@
     ./module/editor/vim/nvim.nix
     ./module/emacs
     ./module/tmux.nix
+    ./module/video-player.nix
     ./module/shell/zsh/zsh.nix
     ./module/terminal/foot.nix
     ./module/terminal/alacritty/settings.nix
@@ -59,7 +60,7 @@
     vgrep delta amber fastmod unstablePkgs.sad # sd sad
     #pistol
     #jetbrains.goland
-    youtube-dl
+    youtube-dl yt-dlp ytfzf
     zip
     imv gimp
   ];
