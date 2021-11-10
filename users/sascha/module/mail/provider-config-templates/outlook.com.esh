@@ -1,4 +1,4 @@
-"<%= $email %>" = {
+accounts.email.accounts."<%= $email %>" = {
   address = "<%= $email %>";
   userName = "";
   realName = "";
