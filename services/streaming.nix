@@ -8,4 +8,15 @@
   # NOTE This is required for obs-studio. In OBS version 26, this might be no
   # longer needed.
   boot.kernelModules = ["v4l2loopback"];
+
+  xdg = {
+    portal = {
+      enable = true;
+      extraPortals = [
+        pkgs.xdg-desktop-portal-wlr
+        pkgs.xdg-desktop-portal-gtk
+      ];
+      gtkUsePortal = true;
+    };
+  };
 }

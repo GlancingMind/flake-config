@@ -13,16 +13,10 @@ in
     qt5.qtwayland
     source-code-pro
     pulseaudio # required to use pactl for media keys
+    firefox-wayland
   ];
 
   fonts.fontconfig.enable = true;
-
-  programs.firefox = lib.attrsets.recursiveUpdate (import ../../program/browser/web/firefox/firefox.nix) {
-    #NOTE disable firefox-wayland, as building the drv will result in a
-    #permission denied access error. Will use the normal firefox package for
-    #now.
-    #package = pkgs.firefox-wayland;
-  };
 
   xdg.configFile."i3status".source = ../../program/status/i3status;
 
