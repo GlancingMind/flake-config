@@ -12,6 +12,7 @@ in
     grim slurp swappy
     qt5.qtwayland
     source-code-pro
+    pulseaudio # required to use pactl for media keys
   ];
 
   fonts.fontconfig.enable = true;
@@ -56,10 +57,10 @@ in
         };
       };
       keybindings = lib.mkOptionDefault {
-        "XF86AudioRaiseVolume" = "exec amixer -q sset Master 3%+ unmute";
-        "XF86AudioLowerVolume" = "exec amixer -q sset Master 3%- unmute";
-        "XF86AudioMute" = "exec amixer -q sset Master toggle";
-        "XF86AudioMicMute" = "exec amixer set Capture toggle";
+        "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +3%";
+        "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -3%";
+        "XF86AudioMute" = "exec pactl set-sink-mute @DEFAULT_SINK@ toggle";
+        "XF86AudioMicMute" = "exec pactl set-source-mute @DEFAULT_SOURCE@ toggle";
         "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10%+";
         "XF86MonBrightnessDown" = " exec ${pkgs.brightnessctl}/bin/brightnessctl set 10%-";
       };

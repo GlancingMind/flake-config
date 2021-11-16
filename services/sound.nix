@@ -1,12 +1,12 @@
 { pkgs, ...}:
 {
-  environment.systemPackages = with pkgs; [
-    apulse
-  ];
+  sound.enable = false;
 
-  sound.enable = true;
-  # TODO when enabled be sure to install apulse too!
-  # can conditianally install like so.
-  # pkgs.lib.optional (pulseaudio ? enable -> pulseaudio.enable) pkgs.apulse
-  hardware.pulseaudio.enable = true;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
 }
