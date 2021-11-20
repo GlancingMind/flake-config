@@ -9,6 +9,7 @@
     };
     stable.url = github:NixOS/nixpkgs/nixos-21.05;
     unstable.url = github:NixOS/nixpkgs/nixos-unstable;
+    own.url = github:GlancingMind/nixpkgs/release-21.05;
     home-manager = {
       url = github:nix-community/home-manager/release-21.05;
       inputs.nixpkgs.follows = "stable";
@@ -19,11 +20,12 @@
     };
   };
 
-  outputs = { self, flake-compat, flake-utils, customPkgs, home-manager, stable, unstable }:
+  outputs = { self, flake-compat, flake-utils, customPkgs, home-manager, stable, unstable, own }:
   let
     system = "x86_64-linux";
     stablePkgs = import stable { inherit system; };
     unstablePkgs = import unstable { inherit system; };
+    ownPkgs = import own { inherit system; };
     lib = stable.lib;
   in {
     devShell.${system} = stablePkgs.mkShell {
