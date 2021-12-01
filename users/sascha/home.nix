@@ -61,13 +61,14 @@
     libvirt vagrant docker-compose
     gnumake
     vis dvtm abduco #as Vim and Tmux alternative
-    zathura poppler_utils
+    zathura poppler_utils pandoc
     zotero
     #chromium
     #vscodium
     fselect
     peco
     vgrep delta amber fastmod unstablePkgs.sad # sd sad
+    scc
     #pistol
     #jetbrains.goland
     youtube-dl yt-dlp ytfzf
