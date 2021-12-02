@@ -1,7 +1,14 @@
 { username, ...}:
 {
   # must add user to libvirtd and docker group
-  virtualisation.docker.enable = true;
+  virtualisation = {
+    podman = {
+      enable = true;
+      dockerCompat = true;
+    };
+    docker.enable = false;
+  };
+
   virtualisation.libvirtd.enable = true;
   services.qemuGuest.enable = true;
   services.nfs.server.enable = true;
