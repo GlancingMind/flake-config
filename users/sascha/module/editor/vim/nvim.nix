@@ -16,7 +16,7 @@ in
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
-    package = pkgs.unstablePkgs.neovim-unwrapped;
+    package = pkgs.neovim-unwrapped;
     extraConfig = builtins.readFile ./config/nvimrc;
     plugins = [
       {
