@@ -7,11 +7,11 @@
       url = github:edolstra/flake-compat;
       flake = false;
     };
-    stable.url = github:NixOS/nixpkgs/nixos-21.05;
+    stable.url = github:NixOS/nixpkgs/nixos-21.11;
     unstable.url = github:NixOS/nixpkgs/nixos-unstable;
-    own.url = github:GlancingMind/nixpkgs/release-21.05;
+    own.url = github:GlancingMind/nixpkgs/release-21.11;
     home-manager = {
-      url = github:nix-community/home-manager/release-21.05;
+      url = github:nix-community/home-manager/release-21.11;
       inputs.nixpkgs.follows = "stable";
     };
     customPkgs = {
