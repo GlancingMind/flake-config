@@ -56,6 +56,7 @@
     android-file-transfer
     gitAndTools.git-bug
     gitAndTools.git-annex lsof #lsof is required for git-annex webapp
+    reno
     hledger hledger-ui
     w3m
     libvirt vagrant podman-compose #docker-compose
