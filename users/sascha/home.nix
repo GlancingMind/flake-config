@@ -58,16 +58,16 @@
     gitAndTools.git-annex lsof #lsof is required for git-annex webapp
     hledger hledger-ui
     w3m
-    libvirt vagrant docker-compose
+    libvirt vagrant podman-compose #docker-compose
     gnumake
     vis dvtm abduco #as Vim and Tmux alternative
     zathura poppler_utils pandoc
-    zotero
+    zotero zk
     #chromium
     #vscodium
     fselect
-    peco
-    vgrep delta amber fastmod unstablePkgs.sad # sd sad
+    peco viddy dasel
+    vgrep delta amber fastmod sd sad
     scc
     #pistol
     #jetbrains.goland
