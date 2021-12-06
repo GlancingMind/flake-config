@@ -76,6 +76,7 @@
     zip
     imv gimp
     cachix
+    remind
   ];
 
   programs.direnv = {
