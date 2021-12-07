@@ -62,7 +62,7 @@
     libvirt vagrant podman-compose #docker-compose
     gnumake
     vis dvtm abduco #as Vim and Tmux alternative
-    zathura poppler_utils pandoc
+    zathura poppler_utils pandoc texlive.combined.scheme-small #for pandoc
     zotero zk
     #chromium
     #vscodium
