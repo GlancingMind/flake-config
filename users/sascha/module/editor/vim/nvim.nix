@@ -17,26 +17,24 @@ in
     vimAlias = true;
     vimdiffAlias = true;
     package = pkgs.neovim-unwrapped;
-    extraConfig = builtins.readFile ./config/nvimrc;
+    #extraConfig = builtins.readFile ./config/nvimrc;
     plugins = [
       {
         plugin = pkgs.vimPlugins.gruvbox;
-        config = builtins.readFile ./config/gruvbox.vim;
+        #NOTE prepand my nvimrc to first plugin config, as extraConfig seems
+        #to be added after plugin configs instead of before. Resulting in
+        #broken keymaps etc.
+        config = builtins.readFile ./config/nvimrc + builtins.readFile ./config/gruvbox.vim;
       }
       {
         plugin = pkgs.vimPlugins.nvim-lspconfig;
         config = builtins.readFile ./config/lspconfig.vim;
       }
-      # NOTE have to use trackedPlugins, as these plugins seem not to load...
-      trackedPlugins.hop-nvim
-      trackedPlugins.nvim-lspkind
-      trackedPlugins.nvim-cmp
-      trackedPlugins.cmp-nvim-lsp
-      trackedPlugins.cmp-buffer
-      #pkgs.vimPlugins.lspkind-nvim
-      #pkgs.unstablePkgs.vimPlugins.nvim-cmp
-      #pkgs.unstablePkgs.vimPlugins.cmp-nvim-lsp
-      #pkgs.unstablePkgs.vimPlugins.cmp-buffer
+      pkgs.vimPlugins.hop-nvim
+      pkgs.vimPlugins.nvim-cmp
+      pkgs.vimPlugins.cmp-buffer
+      pkgs.vimPlugins.cmp-nvim-lsp
+      pkgs.vimPlugins.lspkind-nvim
       {
         plugin = pkgs.vimPlugins.lspsaga-nvim;
         config = builtins.readFile ./config/lspsaga.vim;
@@ -44,9 +42,9 @@ in
       pkgs.vimPlugins.vim-surround
       pkgs.vimPlugins.vim-fugitive
       pkgs.vimPlugins.vim-go
-      trackedPlugins."gina.vim"
-      trackedPlugins.emmet-vim
-      trackedPlugins.vim-nix
+      pkgs.vimPlugins.gina-vim
+      pkgs.vimPlugins.emmet-vim
+      pkgs.vimPlugins.vim-nix
       {
         plugin = trackedPlugins.vim-rescript;
         config = builtins.readFile ./config/vim-rescript.vim;
@@ -56,7 +54,7 @@ in
         config = builtins.readFile ./config/vim-picker.vim;
       }
       {
-        plugin = trackedPlugins."vim-editorconfig";
+        plugin = pkgs.vimPlugins.editorconfig-vim;
         config = builtins.readFile ./config/editorconfig.vim;
       }
       {
@@ -67,8 +65,8 @@ in
         plugin = pkgs.vimPlugins.vimwiki;
         config = builtins.readFile ./config/vimwiki.vim;
       }
-      #pkgs.unstablePkgs.vimPlugins.telescope-nvim
-      #pkgs.unstablePkgs.vimPlugins.telescope-fzy-native-nvim
+      #pkgs.vimPlugins.telescope-nvim
+      #pkgs.vimPlugins.telescope-fzy-native-nvim
       #{
       #  plugin = hardmode;
       #  #config = builtins.readFile ./config/hardmode.vim
