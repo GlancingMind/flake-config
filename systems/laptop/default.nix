@@ -17,6 +17,8 @@
     '';
     # Hardlink identical files together
     autoOptimiseStore = true;
+    # Enable sandboxing for nixpkg contribution
+    useSandbox = true;
   };
 
   # NOTE installs nix with flake support as separate command
