@@ -1,26 +1,27 @@
 { username, ...}:
 {
   # must add user to libvirtd and docker group
-  virtualisation = {
-    podman = {
-      enable = true;
-      dockerCompat = true;
-    };
-    docker.enable = false;
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
   };
 
-  virtualisation.libvirtd.enable = true;
-  services.qemuGuest.enable = true;
-  services.nfs.server.enable = true;
+  # Docker
+  #virtualisation.docker.enable = false;
+  #users.users."${username}".extraGroups = [ "docker" ];
 
-  users.users."${username}".extraGroups = [ "docker" "libvirtd" ];
+  # Qemu, libvirt, vagrant
+  #virtualisation.libvirtd.enable = true;
+  #services.qemuGuest.enable = true;
+  #services.nfs.server.enable = true;
 
-  # Open ports in the firewall.
-  networking.firewall =
-    let
-      vagrant.nfs.ports = [ 111 2049 20048 ];
-    in {
-      allowedTCPPorts = vagrant.nfs.ports;
-      allowedUDPPorts = vagrant.nfs.ports;
-    };
+  #users.users."${username}".extraGroups = [ "libvirtd" ];
+
+  ## Open ports in the firewall.
+  #networking.firewall = let
+  #  vagrant.nfs.ports = [ 111 2049 20048 ];
+  #in {
+  #  allowedTCPPorts = vagrant.nfs.ports;
+  #  allowedUDPPorts = vagrant.nfs.ports;
+  #};
 }
