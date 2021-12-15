@@ -69,10 +69,8 @@
     fselect
     peco viddy dasel
     vgrep delta amber fastmod sd sad
-    scc
-    #pistol
-    #jetbrains.goland
-    youtube-dl yt-dlp ytfzf
+    scc ripgrep ugrep
+    youtube-dl yt-dlp ytfzf viu
     zip
     imv gimp
     cachix
