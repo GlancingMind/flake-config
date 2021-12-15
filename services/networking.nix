@@ -1,3 +1,5 @@
+# NOTE: For networkd, iwd and resolved configuration see ArchWiki or
+# https://insanity.industries/post/simple-networking/
 { pkgs, ...}:
 {
   environment.systemPackages = with pkgs; [
@@ -5,15 +7,14 @@
   ];
 
   networking.hostName = "thinkpad";
+
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
   networking.dhcpcd.enable = false;
-  networking.useNetworkd = true;
-  services.resolved.enable = true;
 
-  networking.wireless.iwd.enable = true;
+  networking.useNetworkd = true;
   systemd.network = {
     enable = true;
     networks = {
@@ -21,15 +22,38 @@
         name = "wlan0";
         DHCP = "yes";
         networkConfig = {
-          IPv6PrivacyExtensions = "yes";
+          IPv6PrivacyExtensions = true;
+        };
+        dhcpConfig = {
+          Anonymize = true;
         };
       };
-      #"20-wired" = {
-      #  name = "en*";
-      #  DHCP = "yes";
-      #  networkConfig = {
-      #    IPv6PrivacyExtensions = "yes";
-      #  };
+      "20-wired" = {
+        name = "en*";
+        DHCP = "yes";
+        networkConfig = {
+          IPv6PrivacyExtensions = true;
+        };
+        dhcpConfig = {
+          Anonymize = true;
+        };
+      };
+    };
+  };
+  services.resolved.enable = true;
+
+  networking.wireless.iwd = {
+    enable = true;
+    settings = {
+      General = {
+        # Produce following errors for `systemctl status iwd`
+        # resolve-systemd: Failed to modify the DNS entries. org.freedesktop.resolve1.LinkBusy: Link wlan0 is managed.
+        # resolve-systemd: Failed to modify the domains entries. org.freedesktop.resolve1.LinkBusy: Link wlan0 is managed.
+        EnableNetworkConfiguration = false;
+        AddressRandomization = "network";
+      };
+      #Settings = {
+      #  AlwaysRadomizeAddress = true;
       #};
     };
   };
