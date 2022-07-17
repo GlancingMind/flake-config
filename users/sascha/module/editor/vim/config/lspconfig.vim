@@ -39,6 +39,9 @@ end
 
 local cmp = require('cmp')
 cmp.setup({
+  completion = {
+      autocomplete = false,
+  },
   snippet = {},
   mapping = {
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
@@ -53,7 +56,6 @@ cmp.setup({
   },
   formatting = {
     format = require('lspkind').cmp_format({
-      with_text = true,
       menu =({
         buffer = "[Buffer]",
         nvim_lsp = "[LSP]",

@@ -6,7 +6,8 @@
     pkgs.android-udev-rules
   ];
 
-  users.users."${username}".extraGroups = [ "adbusers" ];
+  #programs.adb.enable = true;
+  #users.users."${username}".extraGroups = [ "adbusers" ];
 
   # Enable NTFS-3G to allow mounting of ntfs formatted usb stick.
   boot.supportedFilesystems = ["ntfs"];

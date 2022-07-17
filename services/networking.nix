@@ -21,22 +21,23 @@
       "25-wireless" = {
         name = "wlan0";
         DHCP = "yes";
-        networkConfig = {
-          IPv6PrivacyExtensions = true;
-        };
-        dhcpConfig = {
-          Anonymize = true;
-        };
+        #networkConfig = {
+        #  IPv6PrivacyExtensions = true;
+        #};
+        #dhcpConfig = {
+        #  Anonymize = true;
+        #};
       };
       "20-wired" = {
+        enable = false;
         name = "en*";
         DHCP = "yes";
-        networkConfig = {
-          IPv6PrivacyExtensions = true;
-        };
-        dhcpConfig = {
-          Anonymize = true;
-        };
+        #networkConfig = {
+        #  IPv6PrivacyExtensions = true;
+        #};
+        #dhcpConfig = {
+        #  Anonymize = true;
+        #};
       };
     };
   };

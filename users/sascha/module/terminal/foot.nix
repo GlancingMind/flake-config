@@ -11,6 +11,7 @@
         term = "xterm-256color";
         font = "monospace:size=11";
         dpi-aware = "no";
+        pad = "0x0 center";
       };
 
       colors = {

@@ -31,6 +31,7 @@ in {
 
   imports = [
     (services.virtualisation { inherit username; })
+    (services.caches)
     (services.sound)
     (services.networking)
     (services.development)

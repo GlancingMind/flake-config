@@ -1,4 +1,5 @@
 {
+  caches = import ./caches.nix;
   sound = import ./sound.nix;
   networking = import ./networking.nix;
   virtualisation = import ./virtualisation.nix;

@@ -14,6 +14,7 @@ in
     source-code-pro
     pulseaudio # required to use pactl for media keys
     firefox-wayland
+    wdisplays
   ];
 
   fonts.fontconfig.enable = true;
@@ -28,7 +29,7 @@ in
     MOZ_ENABLE_WAYLAND = "1";
 
     # needs qt5.qtwayland in systemPackages
-    QT_QPA_PLATFORM = "wayland";
+    QT_QPA_PLATFORM = "wayland;xcb"; # if wayland doesn't work fall back to x
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
 
     _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd_hrgb";
@@ -72,13 +73,18 @@ in
         };
       };
       bars = [
-        {
-          position = "top";
+        rec {
+          id = "system-stats";
+          mode = "hide";
+          position = "bottom";
           statusCommand = "${pkgs.i3status}/bin/i3status";
           fonts = {
             names = [ "Monospace" "SourceCodePro" ];
             size = 8.0;
           };
+          extraConfig = ''
+            ${id} gaps 5
+          '';
         }
       ];
     };

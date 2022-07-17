@@ -13,6 +13,10 @@
         size = 11;
       };
 
+      window = {
+        dynamic_padding = true;
+      };
+
       colors = {
         primary = {
           # hard contrast: background = '0xf9f5d7';

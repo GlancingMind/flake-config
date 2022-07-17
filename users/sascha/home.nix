@@ -8,6 +8,7 @@
     #./role/x11/i3.nix
     #./module/mail/generated/mail.nix
     #./module/surfraw.nix
+    ./module/shell/shell.nix
     ./module/obs.nix
     #./module/editor/vim/vim.nix
     ./module/editor/vim/nvim.nix
@@ -49,32 +50,38 @@
   #home.username = "$USER";
 
   home.packages = with pkgs; [
+    dasht zeal
+    glow
+    nix-du graphviz
     pavucontrol
     htop unzip dash
     xdg_utils
-    jmtpfs
-    android-file-transfer
+    jmtpfs android-file-transfer go-mtpfs libusb1
     gitAndTools.git-bug
     gitAndTools.git-annex lsof #lsof is required for git-annex webapp
     reno
     hledger hledger-ui
     w3m
-    libvirt vagrant podman-compose #docker-compose
+    #libvirt vagrant podman-compose #docker-compose
     gnumake
     vis dvtm abduco #as Vim and Tmux alternative
     zathura poppler_utils pandoc texlive.combined.scheme-small #for pandoc
     zotero zk
     #chromium
-    #vscodium
     fselect
     peco viddy dasel
     vgrep delta amber fastmod sd sad
     scc ripgrep ugrep
-    youtube-dl yt-dlp ytfzf viu
+    youtube-dl yt-dlp ytfzf viu mps-youtube
     zip
-    imv gimp
+    vimiv-qt imv gimp
     cachix
     remind
+    fbida libsixel lsix
+    tmpmail
+    ed
+    twtxt
+    wdisplays
   ];
 
   programs.direnv = {
@@ -82,7 +89,6 @@
     enableZshIntegration = true;
     nix-direnv = {
       enable = true;
-      enableFlakes = true;
     };
   };
 
