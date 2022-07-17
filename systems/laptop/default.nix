@@ -7,6 +7,10 @@
   ];
 
   nix = {
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+
     # Hardlink identical files together
     autoOptimiseStore = true;
     # Enable sandboxing for nixpkg contribution
