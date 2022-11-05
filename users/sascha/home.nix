@@ -20,6 +20,7 @@
     ./module/terminal/alacritty/settings.nix
     ./module/password-manager/pass/password-store.nix
     #./module/irssi.nix
+    ./module/zoxide.nix
   ];
 
   xdg = {
