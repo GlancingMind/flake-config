@@ -29,7 +29,6 @@
         #};
       };
       "20-wired" = {
-        enable = false;
         name = "en*";
         DHCP = "yes";
         #networkConfig = {
@@ -39,6 +38,9 @@
         #  Anonymize = true;
         #};
       };
+    };
+    wait-online = {
+      anyInterface = true;
     };
   };
   services.resolved.enable = true;
