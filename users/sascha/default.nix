@@ -23,11 +23,9 @@ in {
     users."${username}" = import ./home.nix;
   };
 
-  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-    "goland"
-    "brgenml1lpr"
-    "brgenml1cupswrapper"
-  ];
+  nixpkgs.config.allowUnfreePredicate = let
+    unfreePackageNames = import ./unfree-package-names.nix;
+  in pkg: builtins.elem (lib.getName pkg) unfreePackageNames;
 
   imports = [
     (services.virtualisation { inherit username; })
