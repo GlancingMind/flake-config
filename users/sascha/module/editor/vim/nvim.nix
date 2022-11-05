@@ -8,7 +8,7 @@ in
     fzy fd ripgrep
     # Add support for --remote and --servername cli-flags
     neovim-remote
-    nerdfonts
+    #nerdfonts
   ];
 
   programs.neovim = {
