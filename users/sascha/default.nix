@@ -29,6 +29,7 @@ in {
 
   imports = [
     (services.virtualisation { inherit username; })
+    (services.bluetooth)
     (services.caches)
     (services.sound)
     (services.networking)

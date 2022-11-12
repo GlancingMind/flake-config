@@ -1,5 +1,6 @@
 {
   caches = import ./caches.nix;
+  bluetooth = import ./bluetooth.nix;
   sound = import ./sound.nix;
   networking = import ./networking.nix;
   virtualisation = import ./virtualisation.nix;
