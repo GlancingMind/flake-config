@@ -51,13 +51,20 @@ in
           xkb_options = "caps:ctrl_modifier";
         };
       };
-      keybindings = lib.mkOptionDefault {
+      keybindings = let
+        brightnessctl = lib.getExe pkgs.brightnessctl;
+        playerctl = lib.getExe pkgs.playerctl;
+      in lib.mkOptionDefault {
+        "XF86MonBrightnessUp" = "exec ${brightnessctl} set 10%+";
+        "XF86MonBrightnessDown" = " exec ${brightnessctl} set 10%-";
         "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +3%";
         "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -3%";
         "XF86AudioMute" = "exec pactl set-sink-mute @DEFAULT_SINK@ toggle";
         "XF86AudioMicMute" = "exec pactl set-source-mute @DEFAULT_SOURCE@ toggle";
-        "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10%+";
-        "XF86MonBrightnessDown" = " exec ${pkgs.brightnessctl}/bin/brightnessctl set 10%-";
+        "XF86AudioPlay" = "exec ${playerctl} play-pause";
+        "XF86AudioStop" = "exec ${playerctl} stop";
+        "XF86AudioNext" = "exec ${playerctl} next";
+        "XF86AudioPrev" = "exec ${playerctl} previous";
       };
       output = {
         "*" = {
@@ -77,7 +84,7 @@ in
           id = "system-stats";
           mode = "hide";
           position = "bottom";
-          statusCommand = "${pkgs.i3status}/bin/i3status";
+          statusCommand = "${lib.getExe pkgs.i3status}";
           fonts = {
             names = [ "Monospace" "SourceCodePro" ];
             size = 8.0;
