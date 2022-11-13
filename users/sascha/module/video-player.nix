@@ -1,11 +1,11 @@
-{ pkgs, config, ... }:
+{ pkgs, lib, config, ... }:
 {
   programs.mpv = {
     enable = true;
     config = {
       #NOTE use the more frequently updated yt-dlp instead of youtube-dl to
       # circumvent throtteling issues.
-      script-opts="ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp";
+      script-opts="ytdl_hook-ytdl_path=${lib.getExe pkgs.yt-dlp}";
     };
     profiles = {
       "youtube-1080p" = {

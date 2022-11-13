@@ -1,8 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   home.shellAliases = let
-    fd = "${pkgs.fd}/bin/fd";
-    fzy = "${pkgs.fzy}/bin/fzy";
+    fd = lib.getExe pkgs.fd;
+    fzy = lib.getExe pkgs.fzy;
   in {
     jd = ''
       function jumpToDir() {

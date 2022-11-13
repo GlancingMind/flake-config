@@ -21,14 +21,14 @@
     #addElvi = [ (pkgs.buildPackages.writeScriptBin "wSB-elvi" "#Hello, this is a test!") ];
 
     config.useGraphicalBrowser = false;
-    config.textual.browser = "${pkgs.w3m}/bin/w3m";
+    config.textual.browser = lib.getExe pkgs.w3m;
     config.textual.browserArgs = ["-cols 2" "-dump"];
 
     settings = {
       #graphical = false;
       #graphical_browser_args = "";
       #quote_args = true;
-      #text_browser = "${pkgs.w3m}/bin/w3m";
+      #text_browser = lib.getExe pkgs.w3m;
       #text_browser = "w3m";
       #text_browser_args = "-dump -M";
     };

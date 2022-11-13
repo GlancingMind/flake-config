@@ -48,7 +48,6 @@
   };
 
   home.homeDirectory ="/home/sascha";
-  #home.username = "$USER";
 
   home.packages = with pkgs; [
     dasht zeal
@@ -121,15 +120,9 @@
 
   # See all available envs here: https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap08.html
   #   - Setting of Browser and TERM is done by the respective "desktop" environment as wayland requires diffrent browser/terminal as x11
-  # NOTE Maybe use:
-  # - import or list package directly as dependency e.g. EDITOR = (import .../vim.nix)/bin/vim;
-  # - mimeApps.defaultApplications."text/plain" = (import .../vim.nix);
-  home.sessionVariables = rec {
-    SHELL = "zsh";
-    VISUAL = "vim";
-    EDITOR = VISUAL;
-    # use NIX recursive set as $VISUAL will be empty
-    # because home-manager sorts variables and EDITOR
-    # will be set before VISUAL is known.
+  home.sessionVariables = {
+    SHELL = lib.getExe pkgs.zsh;
+    EDITOR = lib.getExe pkgs.neovim;
+    VISUAL = lib.getExe pkgs.neovim;
   };
 }

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 {
   programs.alacritty = {
     enable = true;
@@ -7,7 +7,7 @@
         TERM = "xterm-256color";
       };
       shell = {
-        program = "${pkgs.tmux}/bin/tmux";
+        program = lib.getExe pkgs.tmux;
       };
       font = {
         size = 11;
