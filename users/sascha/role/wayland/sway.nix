@@ -6,8 +6,6 @@ let
   };
 in
 {
-  #nixpkgs.config.allowUnfree = true;
-
   home.packages = with pkgs; [
     grim slurp swappy
     qt5.qtwayland
@@ -36,13 +34,37 @@ in
     _JAVA_AWT_WM_NONREPARENTING = "1";
   };
 
-  wayland.windowManager.sway = {
+  xdg.desktopEntries = {
+    poweroff = {
+      name = "poweroff";
+      exec = "shutdown now";
+    };
+    reboot = {
+      name = "reboot";
+      exec = "systemctl reboot";
+    };
+    suspend = {
+      name = "suspend";
+      exec = "systemctl suspend";
+    };
+  };
+
+  wayland.windowManager.sway = let
+    application-launcher = pkgs.writeShellApplication {
+      name = "application-launcher";
+      runtimeInputs = with pkgs; [ bemenu j4-dmenu-desktop ];
+      text = ''
+        export BEMENU_BACKEND=wayland
+        j4-dmenu-desktop --use-xdg-de --dmenu="bemenu -m 1 -i"
+      '';
+    };
+  in {
     enable = true;
     xwayland = true;
     config = {
       modifier = "Mod4";
-      terminal = "${pkgs.alacritty}/bin/alacritty";
-      menu = "BEMENU_BACKEND=wayland ${pkgs.bemenu}/bin/bemenu-run -m 1 -i";
+      terminal = lib.getExe pkgs.alacritty;
+      menu = lib.getExe application-launcher;
       input = {
         "*" = {
           xkb_layout = "de";
@@ -84,7 +106,7 @@ in
           id = "system-stats";
           mode = "hide";
           position = "bottom";
-          statusCommand = "${lib.getExe pkgs.i3status}";
+          statusCommand = lib.getExe pkgs.i3status;
           fonts = {
             names = [ "Monospace" "SourceCodePro" ];
             size = 8.0;
