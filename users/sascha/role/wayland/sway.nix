@@ -20,8 +20,8 @@ in
   xdg.configFile."i3status".source = ../../program/status/i3status;
 
   home.sessionVariables = {
-    TERM = "alacritty";
-    BROWSER = "firefox";
+    TERM = lib.getExe pkgs.foot;
+    BROWSER = lib.getExe pkgs.firefox;
 
     # enable wayland support for firefox
     MOZ_ENABLE_WAYLAND = "1";
@@ -63,7 +63,7 @@ in
     xwayland = true;
     config = {
       modifier = "Mod4";
-      terminal = lib.getExe pkgs.alacritty;
+      terminal = lib.getExe pkgs.foot;
       menu = lib.getExe application-launcher;
       input = {
         "*" = {
