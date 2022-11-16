@@ -20,7 +20,7 @@ in
   xdg.configFile."i3status".source = ../../program/status/i3status;
 
   home.sessionVariables = {
-    TERM = lib.getExe pkgs.foot;
+    TERM = pkgs.foot.pname;
     BROWSER = lib.getExe pkgs.firefox;
 
     # enable wayland support for firefox
