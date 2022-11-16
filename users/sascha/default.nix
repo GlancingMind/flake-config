@@ -7,11 +7,13 @@ in {
     isNormalUser = true;
     extraGroups = [ "video" "wheel" ];
     #home ="/home/sascha";
-    shell = pkgs.zsh;
+    shell = pkgs.bashInteractive;
   };
 
-  # required for zsh completion
-  environment.pathsToLink = [ "/share/zsh" ];
+  environment.pathsToLink = [
+    "/share/zsh" # required for zsh completion
+    "/share/bash-completion" # required for bash completion
+  ];
 
   # required to start sway
   hardware.opengl.enable = true;

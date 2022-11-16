@@ -1,7 +1,6 @@
 { pkgs, ... }:
 {
   programs.zsh = {
-    enable = true;
     defaultKeymap = "viins";
     # grml zsh overrides viins setting, need to apply it again after sourcing gmrl
     initExtraBeforeCompInit = ''

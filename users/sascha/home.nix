@@ -15,7 +15,6 @@
     #./module/emacs
     ./module/tmux.nix
     ./module/video-player.nix
-    ./module/shell/zsh/zsh.nix
     ./module/terminal/foot.nix
     ./module/terminal/alacritty/settings.nix
     ./module/password-manager/pass/password-store.nix
@@ -121,7 +120,7 @@
   # See all available envs here: https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap08.html
   #   - Setting of Browser and TERM is done by the respective "desktop" environment as wayland requires diffrent browser/terminal as x11
   home.sessionVariables = {
-    SHELL = lib.getExe pkgs.zsh;
+    SHELL = lib.getExe pkgs.bashInteractive;
     EDITOR = lib.getExe pkgs.neovim;
     VISUAL = lib.getExe pkgs.neovim;
   };
