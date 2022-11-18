@@ -1,9 +1,11 @@
 { config, lib, pkgs, ...}:
 let
   glenda-wallpaper = builtins.fetchurl {
-    url = https://9p.io/plan9/img/spaceglenda300.jpg;
+    url = "https://9p.io/plan9/img/spaceglenda300.jpg";
     sha256 = "1d16z1ralcvif6clyn244w08wypbvag1hrwi68jbdpv24x0r2vfg";
   };
+
+  terminal = pkgs.alacritty;
 in
 {
   home.packages = with pkgs; [
@@ -20,7 +22,7 @@ in
   xdg.configFile."i3status".source = ../../program/status/i3status;
 
   home.sessionVariables = {
-    TERM = pkgs.foot.pname;
+    TERM = terminal.pname;
     BROWSER = lib.getExe pkgs.firefox;
 
     # enable wayland support for firefox
@@ -63,7 +65,7 @@ in
     xwayland = true;
     config = {
       modifier = "Mod4";
-      terminal = lib.getExe pkgs.foot;
+      terminal = lib.getExe terminal;
       menu = lib.getExe application-launcher;
       input = {
         "*" = {
