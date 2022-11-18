@@ -1,5 +1,16 @@
 { config, pkgs, lib, ... }:
 {
+  home.packages = with pkgs; [
+    (nerdfonts.override {
+      fonts = [
+        "FantasqueSansMono"
+      ];
+    })
+    fantasque-sans-mono
+  ];
+  # Allow discoverability of fonts installed via home.packages
+  fonts.fontconfig.enable = true;
+
   programs.foot = {
     enable = true;
     settings = {
@@ -9,7 +20,7 @@
       main = {
         shell = lib.getExe pkgs.tmux;
         term = "xterm-256color";
-        font = "monospace:size=11";
+        font = "FantasqueSansMono:size=11";
         dpi-aware = "no";
         pad = "0x0 center";
       };
