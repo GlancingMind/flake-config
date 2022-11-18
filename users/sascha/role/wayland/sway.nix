@@ -14,12 +14,11 @@ in
     source-code-pro
     pulseaudio # required to use pactl for media keys
     firefox-wayland
-    wdisplays
   ];
 
   fonts.fontconfig.enable = true;
 
-  xdg.configFile."i3status".source = ../../program/status/i3status;
+  xdg.configFile."i3status".source = ./i3status;
 
   home.sessionVariables = {
     TERM = terminal.pname;

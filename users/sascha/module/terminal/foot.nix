@@ -7,12 +7,13 @@
       ];
     })
     fantasque-sans-mono
+
+    lsix # List images via sixel
   ];
   # Allow discoverability of fonts installed via home.packages
   fonts.fontconfig.enable = true;
 
   programs.foot = {
-    enable = true;
     settings = {
       # See: https://codeberg.org/dnkl/foot/src/branch/master/doc/foot.ini.5.scd
       # And: https://codeberg.org/dnkl/foot/src/branch/master/foot.ini

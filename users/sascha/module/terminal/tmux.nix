@@ -1,7 +1,6 @@
 { ... }:
 {
   programs.tmux = {
-    enable = true;
     prefix = "ö";
     terminal = "tmux-256color";
     baseIndex = 1;

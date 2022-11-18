@@ -1,6 +1,5 @@
 {
   enable = true;
-
   # Just for reference here.
   #extensions = with pkgs.nur.repos.rycee.firefox-addons; [
   #  privacy-badger
