@@ -11,7 +11,7 @@
     ./module/shell/shell.nix
     ./module/obs.nix
     #./module/editor/vim/vim.nix
-    ./module/editor/vim/nvim.nix
+    #./module/editor/vim/nvim.nix
     #./module/emacs
     ./module/tmux.nix
     ./module/video-player.nix
@@ -49,6 +49,7 @@
   home.homeDirectory ="/home/sascha";
 
   home.packages = with pkgs; [
+    pkgs.packages.neovim
     dasht zeal
     glow
     nix-du graphviz

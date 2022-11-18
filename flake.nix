@@ -8,13 +8,10 @@
       inputs.nixpkgs.follows = "stable";
     };
     unstable.url = github:NixOS/nixpkgs/nixpkgs-unstable;
-    customPkgs = {
-      url = path:./packages/plugins/vim;
-      inputs.nixpkgs.follows = "stable";
-    };
+    own-neovim.url = github:GlancingMind/neovim-setup;
   };
 
-  outputs = { self, home-manager, stable, unstable, customPkgs }:
+  outputs = { self, home-manager, stable, unstable, own-neovim }:
     let
       system = "x86_64-linux";
       stablePkgs = stable.legacyPackages.${system};
@@ -40,7 +37,7 @@
               nix.registry.nixpkgs.flake = stable;
               nixpkgs.overlays = [
                 (final: prev: {
-                  packages = customPkgs.packages.${system};
+                  packages = own-neovim.packages.${system};
                   inherit unstablePkgs;
                 })
               ];
