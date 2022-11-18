@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 {
   programs.readline = {
     enable = true;
@@ -17,5 +17,9 @@
     extraConfig = ''
       Control-l: clear-screen
     '';
+  };
+
+  home.sessionVariables = {
+    INPUTRC="${config.xdg.dataHome}/readline/inputrc";
   };
 }

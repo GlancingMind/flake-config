@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
   home.packages = with pkgs; [
     pinentry        #needed for gpg
@@ -6,7 +6,11 @@
     gopass
   ];
 
-  programs.gpg.enable = true;
+  programs.gpg = {
+    enable = true;
+    homedir = "${config.xdg.dataHome}/gnupg";
+  };
+
   services.gpg-agent = {
     enable = true;
     defaultCacheTtl = 300;

@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -124,5 +124,8 @@
     SHELL = lib.getExe pkgs.bashInteractive;
     EDITOR = lib.getExe pkgs.neovim;
     VISUAL = lib.getExe pkgs.neovim;
+
+    # Unclutter home-directory
+    ANDROID_HOME = "${config.xdg.dataHome}/android";
   };
 }
