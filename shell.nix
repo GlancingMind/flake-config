@@ -1,4 +1,4 @@
-{ mkShellNoCC, git, gnumake, rnix-lsp }:
+{ mkShellNoCC, git, gnumake }:
 
 mkShellNoCC {
   name = "system-setup-shell";
@@ -6,6 +6,5 @@ mkShellNoCC {
   buildInputs = [
     git # required by flake
     gnumake
-    rnix-lsp
   ];
 }
