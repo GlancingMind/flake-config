@@ -2,13 +2,13 @@
   description = "A very basic flake";
 
   inputs = {
-    stable.url = github:NixOS/nixpkgs/nixos-22.05;
+    stable.url = "github:NixOS/nixpkgs/nixos-22.11";
     home-manager = {
-      url = github:nix-community/home-manager/release-22.05;
+      url = "github:nix-community/home-manager/release-22.11";
       inputs.nixpkgs.follows = "stable";
     };
-    unstable.url = github:NixOS/nixpkgs/nixpkgs-unstable;
-    own-neovim.url = github:GlancingMind/neovim-setup;
+    unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    own-neovim.url = "github:GlancingMind/neovim-setup";
   };
 
   outputs = { self, home-manager, stable, unstable, own-neovim }:

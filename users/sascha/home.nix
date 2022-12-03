@@ -3,7 +3,10 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  home.homeDirectory ="/home/sascha";
+  home = {
+    homeDirectory ="/home/sascha";
+    stateVersion = "22.11";
+  };
 
   imports = [
     ./role/wayland

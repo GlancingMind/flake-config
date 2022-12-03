@@ -11,10 +11,12 @@
       experimental-features = nix-command flakes
     '';
 
-    # Hardlink identical files together
-    autoOptimiseStore = true;
-    # Enable sandboxing for nixpkg contribution
-    useSandbox = true;
+    settings = {
+      # Enable sandboxing for nixpkg contribution
+      sandbox = true;
+      # Hardlink identical files together
+      auto-optimise-store = true;
+    };
   };
 
   # Clean /tmp directory on boot
@@ -33,5 +35,5 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "22.05"; # Did you read the comment?
+  system.stateVersion = "22.11"; # Did you read the comment?
 }

@@ -16,7 +16,6 @@
         pkgs.xdg-desktop-portal-wlr
         pkgs.xdg-desktop-portal-gtk
       ];
-      gtkUsePortal = true;
     };
   };
 }
