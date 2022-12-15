@@ -1,5 +1,9 @@
-{ pkgs, ...}:
+{ username, ...}:
 {
+  nix.settings.trusted-users = [
+    username
+  ];
+
   nix.settings = {
     substituters = [
       "https://ros.cachix.org"
