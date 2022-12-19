@@ -7,6 +7,9 @@
       # circumvent throtteling issues.
       script-opts="ytdl_hook-ytdl_path=${lib.getExe pkgs.yt-dlp}";
     };
+    scripts = [
+      pkgs.mpvScripts.mpris
+    ];
     profiles = {
       "youtube-1080p" = {
         ytdl-format="bestvideo[height<=?1080]+bestaudio/best";
