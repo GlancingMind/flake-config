@@ -32,7 +32,7 @@ in {
   imports = [
     (services.virtualisation { inherit username; })
     (services.bluetooth)
-    (services.caches { inherit username; })
+    (services.caches { inherit lib; trusted-user = username; })
     (services.sound)
     (services.networking)
     (services.development)
