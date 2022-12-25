@@ -35,10 +35,13 @@
               # Pin nixpkgs. So "nix run nixpkgs#<package>" will use the
               # pinned version.
               nix.registry.nixpkgs.flake = stable;
-              nixpkgs.overlays = [
+              # Append packages to nixpkgs set which are missing from nixpkgs
+              nixpkgs.overlays = let
+                swww = stablePkgs.callPackage ./packages/swww {};
+              in [
                 (final: prev: {
                   packages = own-neovim.packages.${system};
-                  inherit unstablePkgs;
+                  inherit unstablePkgs swww;
                 })
               ];
             }

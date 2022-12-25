@@ -1,10 +1,5 @@
 { config, lib, pkgs, ...}:
 let
-  glenda-wallpaper = builtins.fetchurl {
-    url = "https://9p.io/plan9/img/spaceglenda300.jpg";
-    sha256 = "1d16z1ralcvif6clyn244w08wypbvag1hrwi68jbdpv24x0r2vfg";
-  };
-
   terminal = pkgs.alacritty;
 in
 {
@@ -20,6 +15,7 @@ in
 
   xdg.configFile."i3status".source = ./i3status;
 
+  #TODO maybe replace with `sway.extraSessionCommands`?
   home.sessionVariables = {
     TERM = terminal.pname;
     BROWSER = lib.getExe pkgs.firefox;
@@ -74,6 +70,26 @@ in
           xkb_options = "caps:ctrl_modifier";
         };
       };
+      startup = let
+        animated-desktop-background = pkgs.writeShellApplication {
+          name = "animated-desktop-background";
+          runtimeInputs = with pkgs; [ swww ];
+          text = let
+            setImage = "swww img --filter Nearest --transition-type center ${cream-soda-image}";
+            cream-soda-image = builtins.fetchurl {
+              name = "cream-soda.gif";
+              url = "https://64.media.tumblr.com/16603c05db90e488eeabc4333d66255b/a9d3423d3756d30a-a4/s500x750/2f7ef1857938f9065d997f5c4c4edf62feb267ec.gifv";
+              sha256 = "08fhcyfay3sb3ar7dfxszbnzkp6bnz1v02hkfwiv6a31nvkfm8q7";
+            };
+          in ''
+            # Set background image when daemon is running.
+            # Otherwise start daemon and set the image
+            ${setImage} || ( swww init && ${setImage} )
+          '';
+        };
+      in [
+        { command = lib.getExe animated-desktop-background; always = true; }
+      ];
       keybindings = let
         brightnessctl = lib.getExe pkgs.brightnessctl;
         playerctl = lib.getExe pkgs.playerctl;
@@ -90,9 +106,14 @@ in
         "XF86AudioPrev" = "exec ${playerctl} previous";
       };
       output = {
-        "*" = {
-          bg = "${glenda-wallpaper} fit #ffffff";
-        };
+        #"*" = let
+        #  glenda-wallpaper = builtins.fetchurl {
+        #    url = "https://9p.io/plan9/img/spaceglenda300.jpg";
+        #    sha256 = "1d16z1ralcvif6clyn244w08wypbvag1hrwi68jbdpv24x0r2vfg";
+        #  };
+        #in {
+        #  bg = "${glenda-wallpaper} fit #ffffff";
+        #};
         VGA-1 = {
           resolution = "1600x900";
           position = "0,0";
