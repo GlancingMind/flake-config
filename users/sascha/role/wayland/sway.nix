@@ -9,27 +9,13 @@ in
     source-code-pro
     pulseaudio # required to use pactl for media keys
     firefox-wayland
+    pkgs.swww
   ];
 
   fonts.fontconfig.enable = true;
 
   xdg.configFile."i3status".source = ./i3status;
 
-  #TODO maybe replace with `sway.extraSessionCommands`?
-  home.sessionVariables = {
-    TERM = terminal.pname;
-    BROWSER = lib.getExe pkgs.firefox;
-
-    # enable wayland support for firefox
-    MOZ_ENABLE_WAYLAND = "1";
-
-    # needs qt5.qtwayland in systemPackages
-    QT_QPA_PLATFORM = "wayland;xcb"; # if wayland doesn't work fall back to x
-    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-
-    _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd_hrgb";
-    _JAVA_AWT_WM_NONREPARENTING = "1";
-  };
 
   xdg.desktopEntries = {
     poweroff = {
@@ -58,6 +44,20 @@ in
   in {
     enable = true;
     xwayland = true;
+    extraSessionCommands = ''
+      export TERM=${terminal.pname}
+      export BROWSER=${lib.getExe pkgs.firefox}
+
+      # enable wayland support for firefox
+      export MOZ_ENABLE_WAYLAND="1"
+
+      # needs qt5.qtwayland in systemPackages
+      export QT_QPA_PLATFORM="wayland;xcb"; # if wayland doesn't work fall back to x
+      export QT_WAYLAND_DISABLE_WINDOWDECORATION="1";
+
+      export _JAVA_OPTIONS="-Dawt.useSystemAAFontSettings=lcd_hrgb";
+      export _JAVA_AWT_WM_NONREPARENTING="1";
+    '';
     config = {
       modifier = "Mod4";
       terminal = lib.getExe terminal;
@@ -75,16 +75,15 @@ in
           name = "animated-desktop-background";
           runtimeInputs = with pkgs; [ swww ];
           text = let
-            setImage = "swww img --filter Nearest --transition-type center ${cream-soda-image}";
-            cream-soda-image = builtins.fetchurl {
-              name = "cream-soda.gif";
-              url = "https://64.media.tumblr.com/16603c05db90e488eeabc4333d66255b/a9d3423d3756d30a-a4/s500x750/2f7ef1857938f9065d997f5c4c4edf62feb267ec.gifv";
-              sha256 = "08fhcyfay3sb3ar7dfxszbnzkp6bnz1v02hkfwiv6a31nvkfm8q7";
+            setWallpaper = "swww img --filter Nearest --transition-type center ${wallpaper}";
+            wallpaper = builtins.fetchurl {
+              url = "https://i.pinimg.com/originals/19/6a/d9/196ad9d3122098b297d7b99ce9ff209f.gif";
+              sha256 = "1mczxwxnvb02w9l6ps137p0sd2928crjf4njb211kw8ams3vzplk";
             };
           in ''
             # Set background image when daemon is running.
             # Otherwise start daemon and set the image
-            ${setImage} || ( swww init && ${setImage} )
+            ${setWallpaper} || ( swww init && ${setWallpaper} )
           '';
         };
       in [
