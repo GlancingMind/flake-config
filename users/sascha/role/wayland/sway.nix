@@ -83,7 +83,7 @@ in
           in ''
             # Set background image when daemon is running.
             # Otherwise start daemon and set the image
-            ${setWallpaper} || ( swww init && ${setWallpaper} )
+            (swww init && ${setWallpaper}) || ${setWallpaper}
           '';
         };
       in [

@@ -1,9 +1,10 @@
-{ pkgs, hardware, ...}:
+{ pkgs, hardware, services, ...}:
 {
   imports = [
     ./hardware-configuration.nix
     (hardware.ssd)
     (hardware.x220)
+    (services.bootscreen)
   ];
 
   nix = {

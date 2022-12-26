@@ -1,4 +1,6 @@
 {
+  bootscreen = import ./bootscreen;
+  login-manager = import ./login-manager.nix;
   caches = import ./caches.nix;
   bluetooth = import ./bluetooth.nix;
   sound = import ./sound.nix;

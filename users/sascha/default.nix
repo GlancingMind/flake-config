@@ -30,6 +30,7 @@ in {
   in pkg: builtins.elem (lib.getName pkg) unfreePackageNames;
 
   imports = [
+    (services.login-manager)
     (services.virtualisation { inherit username; })
     (services.bluetooth)
     (services.caches { inherit lib; trusted-user = username; })
