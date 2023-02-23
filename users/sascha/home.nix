@@ -43,7 +43,7 @@
     smartmontools
     unzip zip
     poppler_utils pandoc texlive.combined.scheme-small #for pandoc
-    zotero
+    zotero openconnect
   ];
 
   programs.direnv = {
