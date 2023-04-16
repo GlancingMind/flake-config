@@ -37,7 +37,7 @@
               nix.registry.nixpkgs.flake = stable;
               # Append packages to nixpkgs set which are missing from nixpkgs
               nixpkgs.overlays = let
-                swww = stablePkgs.callPackage ./packages/swww {};
+                swww = unstablePkgs.swww;
               in [
                 (final: prev: {
                   packages = own-neovim.packages.${system};
