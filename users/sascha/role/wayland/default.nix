@@ -12,6 +12,12 @@
     vimiv-qt imv gimp
   ];
 
+  home.pointerCursor = {
+    package = pkgs.vanilla-dmz;
+    name = "Vanilla-DMZ-AA";
+    gtk.enable = true;
+  };
+
   xdg = {
     enable = true;
     userDirs.enable = true;

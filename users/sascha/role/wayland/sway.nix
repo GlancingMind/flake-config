@@ -16,7 +16,6 @@ in
 
   xdg.configFile."i3status".source = ./i3status;
 
-
   xdg.desktopEntries = {
     poweroff = {
       name = "poweroff";
