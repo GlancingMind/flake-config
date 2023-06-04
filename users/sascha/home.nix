@@ -44,6 +44,7 @@
     unzip zip
     poppler_utils pandoc texlive.combined.scheme-small #for pandoc
     zotero openconnect
+    fd
   ];
 
   programs.direnv = {

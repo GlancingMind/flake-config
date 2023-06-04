@@ -4,12 +4,12 @@ let
 in
 {
   home.packages = with pkgs; [
-    grim slurp swappy
+    grim slurp
     qt5.qtwayland
     source-code-pro
     pulseaudio # required to use pactl for media keys
     firefox-wayland
-    pkgs.swww
+    swww
   ];
 
   fonts.fontconfig.enable = true;
@@ -91,6 +91,7 @@ in
       keybindings = let
         brightnessctl = lib.getExe pkgs.brightnessctl;
         playerctl = lib.getExe pkgs.playerctl;
+        screenshot = lib.getExe pkgs.wayshot;
       in lib.mkOptionDefault {
         "XF86MonBrightnessUp" = "exec ${brightnessctl} set 10%+";
         "XF86MonBrightnessDown" = " exec ${brightnessctl} set 10%-";
@@ -102,6 +103,7 @@ in
         "XF86AudioStop" = "exec ${playerctl} stop";
         "XF86AudioNext" = "exec ${playerctl} next";
         "XF86AudioPrev" = "exec ${playerctl} previous";
+        "Print" = "exec ${screenshot}";
       };
       output = {
         #"*" = let
