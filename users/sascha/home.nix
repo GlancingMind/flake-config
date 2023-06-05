@@ -5,7 +5,7 @@
 
   home = {
     homeDirectory ="/home/sascha";
-    stateVersion = "22.11";
+    stateVersion = "23.05";
   };
 
   imports = [
@@ -45,6 +45,7 @@
     poppler_utils pandoc texlive.combined.scheme-small #for pandoc
     zotero openconnect
     fd
+    xdg-ninja
   ];
 
   programs.direnv = {

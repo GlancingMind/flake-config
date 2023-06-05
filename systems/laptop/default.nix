@@ -21,7 +21,7 @@
   };
 
   # Clean /tmp directory on boot
-  boot.cleanTmpDir = true;
+  boot.tmp.cleanOnBoot = true;
 
   powerManagement.cpuFreqGovernor = "ondemand";
 

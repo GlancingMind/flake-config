@@ -105,6 +105,9 @@ in
         "XF86AudioPrev" = "exec ${playerctl} previous";
         "Print" = "exec ${screenshot}";
       };
+      window = {
+        titlebar = false;
+      };
       output = {
         #"*" = let
         #  glenda-wallpaper = builtins.fetchurl {
