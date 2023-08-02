@@ -67,6 +67,7 @@
       sha256 = "b30989fd9e45c74bf417df74d1da639d1f04d4fd0900be813a2d6a031a56c845";
     };
     eduroamConfig = pkgs.writeText "eduroam.8021x" ''
+      [Security]
       EAP-Method=PEAP
       EAP-Identity=eduroam@thm.de
       EAP-PEAP-Phase2-Method=MSCHAPV2
@@ -81,6 +82,6 @@
       AutoConnect=true
     '';
   in ''
-    ln -sf ${eduroamConfig} /var/lib/iwd/eduroam
+    ln -sf ${eduroamConfig} /var/lib/iwd/eduroam.8021x
   '';
 }
