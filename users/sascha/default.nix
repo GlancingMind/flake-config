@@ -42,5 +42,6 @@ in {
     (services.printing)
     (services.streaming)
     (services.ssh)
+    (services.ausweisapp2)
   ];
 }
