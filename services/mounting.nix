@@ -11,4 +11,10 @@
 
   # Enable NTFS-3G to allow mounting of ntfs formatted usb stick.
   boot.supportedFilesystems = ["ntfs"];
+
+  services.udisks2 = {
+    enable = true;
+    # Mount in /media/ instead of /run/media/$USER/
+    mountOnMedia = true;
+  };
 }
