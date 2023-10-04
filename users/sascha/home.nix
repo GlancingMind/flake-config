@@ -18,6 +18,7 @@
     ./module/multimedia/video-player
     ./module/password-manager
     ./module/notification-manager
+    ./module/backup
   ];
 
   nix.settings = {

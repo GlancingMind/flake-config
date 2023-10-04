@@ -13,4 +13,5 @@
   streaming = import ./streaming.nix;
   ssh = import ./ssh.nix;
   ausweisapp2 = import ./ausweisapp2.nix;
+  backup = import ./backup.nix;
 }

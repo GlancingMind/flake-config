@@ -1,0 +1,6 @@
+{ pkgs, ...}:
+{
+  borgbackup = {
+    enable = false;
+  };
+}

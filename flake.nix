@@ -36,12 +36,10 @@
               # pinned version.
               nix.registry.nixpkgs.flake = stable;
               # Append packages to nixpkgs set which are missing from nixpkgs
-              nixpkgs.overlays = let
-                swww = unstablePkgs.swww;
-              in [
+              nixpkgs.overlays = [
                 (final: prev: {
                   packages = own-neovim.packages.${system};
-                  inherit unstablePkgs swww;
+                  inherit unstablePkgs;
                 })
               ];
             }
